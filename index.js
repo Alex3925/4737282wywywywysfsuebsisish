@@ -419,7 +419,7 @@ axios.get(gifUrl, { responseType: 'arraybuffer' })
 				fs.writeFileSync(gifPath, response.data); 
 				return api.sendMessage("𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗜𝗡𝗚...", event.threadID, () => 
 						api.sendMessage({ 
-								body:`✅ 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗘𝗗 𝗦𝗨𝗖𝗖𝗘𝗦! \n➭ Bot Prefix: ${prefix}\n➭ Autobot owner: zach\n➭ Facebook: https://www.facebook.com/zachary.pnaveax\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ⟨ ${time} ⟩〈 ${thu} 〉`, 
+								body:`✅ 𝗖𝗢𝗡𝗡𝗘𝗖𝗧𝗘𝗗 𝗦𝗨𝗖𝗖𝗘𝗦𝗦𝗙𝗨𝗟𝗟𝗬! \n➭ Bot Prefix: ${prefix}\n➭ Autobot owner: alex\n➭ Facebook: https://www.facebook.com/aceeee012?mibextid=ZbWKwL\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ⟨ ${time} ⟩〈 ${thu} 〉`, 
 								attachment: fs.createReadStream(gifPath)
 						}, event.threadID)
 				);
