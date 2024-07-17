@@ -31,10 +31,10 @@ module.exports.run = async function({ api, event, args }) {
 api.sendTypingIndicator(event.threadID, true);
 
   api.shareContact(`🔍𝙎𝙚𝙖𝙧𝙘𝙝𝙞𝙣𝙜 𝙋𝙡𝙚𝙖𝙨𝙚 𝙒𝙖𝙞𝙩....
-━━━━━━━━━━━━━━━━━━\n\n "${input}"`,api.getCurrentUserID(),event.threadID, event.messageID);
+━━━━━━━━━━━━━━━━━━\n\n "${query}"`,api.getCurrentUserID(),event.threadID, event.messageID);
   
   try {
-    const { data } = await axios.get(`https://openaikey-x20f.onrender.com/api?prompt=${encodeURIComponent(input)}`);
+    const { data } = await axios.get(`https://lianeapi.onrender.com/@hercai/api/Herc.ai?query=${encodeURIComponent(query)}`);
     let response = data.response;
     response += "\n\n";
     api.shareContact(response,api.getCurrentUserID(), event.threadID, event.messageID);
