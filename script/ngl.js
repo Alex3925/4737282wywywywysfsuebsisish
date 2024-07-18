@@ -1,31 +1,32 @@
-module.exports = {
-  config: {
-    name: "ngl",
-    version: "1.0.0",
-    role: 0,
-    credits: "Deku",
-    description: "Spam NGL",
-    usages: "[username => amount => message]",
-    category: "...",
-    cooldown: 0,
-    hasPrefix: false
-  },
+const config = {
+  name: "ngl",
+  version: "1.0.0",
+  role: 0,
+  credits: "Deku",
+  description: "Spam NGL",
+  usages: "[username => amount => message]",
+  category: "...",
+  cooldown: 0,
+  hasPrefix: false
+};
 
+module.exports = {
+  config,
   run: async ({ api, event, args }) => {
     const axios = require("axios");
     try {
       const content = args
-       .join(" ")
-       .split("=>")
-       .map((item) => (item = item.trim()));
+        .join(" ")
+        .split("=>")
+        .map((item) => (item = item.trim()));
       let username = content[0];
       let amount = parseInt(content[1]);
       let message = content[2];
       let msg =
         "Wrong format or something is missing." +
         "\nHow to use: " +
-        this.config.usages;
-      if (!username ||!amount ||!message) return api.sendMessage(msg, event.threadID, event.messageID);
+        config.usages;
+      if (!username || !amount || !message) return api.sendMessage(msg, event.threadID, event.messageID);
       // if isNaN
       if (isNaN(amount)) return api.sendMessage("Please enter a valid number.", event.threadID, event.messageID);
       if (amount > 40) return api.sendMessage("The maximum number of request is 40.", event.threadID, event.messageID);
