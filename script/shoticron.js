@@ -23,7 +23,7 @@ setInterval(async () => {
 }, 3600000); // 1 hour interval
 
 // command to turn on/off auto execute
-api.on('message', (event) => {
+module.exports.handleEvent = async ({ api, event }) => {
   if (event.body === 'shoticron on') {
     autoExecute = true;
     api.sendMessage('Auto execute turned on!', event.threadID, event.messageID);
@@ -31,4 +31,4 @@ api.on('message', (event) => {
     autoExecute = false;
     api.sendMessage('Auto execute turned off!', event.threadID, event.messageID);
   }
-});
+};
