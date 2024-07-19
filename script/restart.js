@@ -4,16 +4,13 @@ module.exports = {
   config: {
     name: 'restart',
     version: '2.0',
-    author: 'Hassan-',
+    role: 2, // Accessible by owner
     cooldown: 5,
-    accessableby: 2, // Accessible by owner
-    category: 'Owner',
-    prefix: false,
     description: {
       vi: 'Khởi động lại bot',
       en: 'Restart bot',
     },
-    usage: '{pn} Restart',
+    usages: '{pn} Restart',
   },
   languages: {
     vi: {
@@ -24,7 +21,7 @@ module.exports = {
     },
   },
 
-  onLoad: function ({ api }) {
+  onLoad: async ({ api }) => {
     const pathFile = `${__dirname}/tmp/restart.txt`;
     if (fs.existsSync(pathFile)) {
       const [tid, time] = fs.readFileSync(pathFile, 'utf-8').split(' ');
@@ -33,10 +30,11 @@ module.exports = {
     }
   },
 
-  start: async function ({ api, event, text, react, reply, getLang }) {
+  run: async ({ api, event, args, getLang, react }) => {
     const pathFile = `${__dirname}/tmp/restart.txt`;
     fs.writeFileSync(pathFile, `${event.threadID} ${Date.now()}`);
-    await reply(getLang('restarting'));
+    api.sendMessage(getLang('restarting'), event.threadID, event.messageID);
+    react('⏳');
     process.exit(2);
   },
 };
