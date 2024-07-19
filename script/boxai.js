@@ -20,7 +20,7 @@ module.exports = {
         axios.get("https://joshweb.click/api/blackboxai?q=" + encodeURIComponent(ask) + "&uid=" + event.senderID)
           .then(response => {
             const rest = response.data;
-            api.editMessage('🤖 | 𝐁𝐥𝐚𝐜𝐤𝐛𝐨𝐱 𝐀𝐈 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞\n━━━━━━━━━━━━━━━━━━\n' + rest.result + '\n━━━━━━━━━━━━━━━━━━\nType "blackbox clear" if you want to clear conversation with blackbox', heru);
+            api.sendMessage('🤖 | 𝐁𝐥𝐚𝐜𝐤𝐛𝐨𝐱 𝐀𝐈 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞\n━━━━━━━━━━━━━━━━━━\n' + rest.result + '\n━━━━━━━━━━━━━━━━━━\nType "blackbox clear" if you want to clear conversation with blackbox', event.threadID, heru);
           })
           .catch(error => {
             api.sendMessage(error.message, event.threadID, event.messageID);
