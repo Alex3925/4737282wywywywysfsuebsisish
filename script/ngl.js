@@ -1,17 +1,18 @@
 module.exports = {
   config: {
     name: "ngl",
+    version: "1.0.0",
+    role: 0,
+    credits: "Deku",
     description: "Spam NGL",
-    prefix: false,
-    accessableby: 0,
-    usage: "[username => amount => message]",
-    category: "Utilities",
-    author: "Deku",
+    usages: "[username => amount => message]",
+    cooldown: 0,
   },
-  start: async function({ api, event, text, react, reply }) {
+
+  run: async ({ api, event, args }) => {
     const axios = require("axios");
     try {
-      const content = text
+      const content = args
        .join(" ")
        .split("=>")
        .map((item) => (item = item.trim()));
@@ -21,19 +22,21 @@ module.exports = {
       let msg =
         "Wrong format or something is missing." +
         "\nHow to use: " +
-        this.config.usage;
-      if (!username ||!amount ||!message) return reply(msg);
+        this.config.usages;
+      if (!username ||!amount ||!message) return api.sendMessage(msg, event.threadID, event.messageID);
       // if isNaN
-      if (isNaN(amount)) return reply("Please enter a valid number.");
-      if (amount > 40) return reply("The maximum number of request is 40.");
-      if (amount < 1) return reply("Please enter a number greater than 0.");
-      react("⏳");
-      reply(
+      if (isNaN(amount)) return api.sendMessage("Please enter a valid number.", event.threadID, event.messageID);
+      if (amount > 40) return api.sendMessage("The maximum number of request is 40.", event.threadID, event.messageID);
+      if (amount < 1) return api.sendMessage("Please enter a number greater than 0.", event.threadID, event.messageID);
+      api.setMessageReaction("⏳", event.messageID, (err) => {}, true);
+      api.sendMessage(
         "You have successfully sent " +
           amount +
           " messages to " +
           username +
           "\nThe request is now processing...",
+        event.threadID,
+        event.messageID
       );
       const headers = {
         referer: `https://ngl.link/${username}`,
@@ -59,7 +62,7 @@ module.exports = {
         }
       }
     } catch (w) {
-      return reply(w["message"]);
+      return api.sendMessage(w["message"], event.threadID, event.messageID);
     }
   },
 };
