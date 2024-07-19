@@ -1,47 +1,39 @@
-const config = {
-  name: "ngl",
-  version: "1.0.0",
-  role: 0,
-  credits: "Deku",
-  description: "Spam NGL",
-  usages: "[username => amount => message]",
-  category: "...",
-  cooldown: 0,
-  hasPrefix: false
-};
-
 module.exports = {
-  config,
-  run: async ({ api, event, args }) => {
+  config: {
+    name: "ngl",
+    description: "Spam NGL",
+    prefix: false,
+    accessableby: 0,
+    usage: "[username => amount => message]",
+    category: "Utilities",
+    author: "Deku",
+  },
+  start: async function({ api, event, text, react, reply }) {
     const axios = require("axios");
     try {
-      const content = args
-        .join(" ")
-        .split("=>")
-        .map((item) => (item = item.trim()));
+      const content = text
+       .join(" ")
+       .split("=>")
+       .map((item) => (item = item.trim()));
       let username = content[0];
       let amount = parseInt(content[1]);
       let message = content[2];
       let msg =
         "Wrong format or something is missing." +
         "\nHow to use: " +
-        config.usages;
-      if (!username || !amount || !message) return api.sendMessage(msg, event.threadID, event.messageID);
+        this.config.usage;
+      if (!username ||!amount ||!message) return reply(msg);
       // if isNaN
-      if (isNaN(amount)) return api.sendMessage("Please enter a valid number.", event.threadID, event.messageID);
-      if (amount > 40) return api.sendMessage("The maximum number of request is 40.", event.threadID, event.messageID);
-      if (amount < 1) return api.sendMessage("Please enter a number greater than 0.", event.threadID, event.messageID);
-      api.sendMessage("⏳", event.threadID, event.messageID, (err, info) => {
-        if (err) console.error(err);
-      });
-      api.sendMessage(
+      if (isNaN(amount)) return reply("Please enter a valid number.");
+      if (amount > 40) return reply("The maximum number of request is 40.");
+      if (amount < 1) return reply("Please enter a number greater than 0.");
+      react("⏳");
+      reply(
         "You have successfully sent " +
           amount +
           " messages to " +
           username +
           "\nThe request is now processing...",
-        event.threadID,
-        event.messageID
       );
       const headers = {
         referer: `https://ngl.link/${username}`,
@@ -67,7 +59,7 @@ module.exports = {
         }
       }
     } catch (w) {
-      return api.sendMessage(w["message"], event.threadID, event.messageID);
+      return reply(w["message"]);
     }
-  }
+  },
 };
