@@ -1,18 +1,17 @@
 const axios = require('axios');
 
 module.exports = {
-  config: {
+  info: {
     name: "nglSpammer",
     version: "1.0",
     description: "Ngl Spammer",
     role: "user",
     credits: "MrSenpai02",
-    cooldown: 8,
-    category: "spam"
+    cooldown: 8
   },
 
-  async run({ api, event, args }) {
-    if (args.length !== 2) {
+  async execute({ api, event, args }) {
+    if (args.length!== 2) {
       api.sendMessage("Please provide username & number of message.", event.threadID);
       return;
     }
@@ -26,7 +25,7 @@ module.exports = {
     const apiUrl = `http://158.101.198.227:8266/?username=${encodeURIComponent(username)}&count=${encodeURIComponent(count)}`;
 
     axios.get(apiUrl)
-      .then(response => {
+     .then(response => {
         const data = response.data.result;
         const { sentCount, notSendCount } = data;
 
@@ -44,7 +43,7 @@ module.exports = {
           api.sendMessage(message, event.threadID);
         }, 1000);
       })
-      .catch(error => {
+     .catch(error => {
         console.error('Error:', error);
         api.sendMessage("Sorry, an error occurred while processing your request.", event.threadID);
       });
