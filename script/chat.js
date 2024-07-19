@@ -1,12 +1,12 @@
 module.exports.config = {
   name: 'chat',
   version: '1.0',
-  description: 'Command to turn on/off chat',
-  guide: 'Turn on/off chat',
-  category: 'box chat',
-  countDown: 5,
   role: 0,
-  author: 'Alex (orig.. Analeah)'
+  author: 'Alex (orig.. Analeah)',
+  description: 'Command to turn on/off chat',
+  usage: 'chat <on/off>',
+  cooldowns: 5,
+  category: 'box chat'
 };
 
 module.exports.run = async function({ api, event, args }) {
@@ -16,9 +16,7 @@ module.exports.run = async function({ api, event, args }) {
       return;
     }
     
-    const threadID = event.threadID;
-    global.zenLeaf[threadID] = global.zenLeaf[threadID] || {};
-    global.zenLeaf[threadID].chatEnabled = true;
+    global.data.threadData[event.threadID].chatEnabled = true;
     api.sendMessage('Chat off is now disabled. Members can now freely chat.', event.threadID, event.messageID);
   } else if (args[0] === 'off') {
     if (event.senderID !== event.adminIDs[0]) {
@@ -26,21 +24,16 @@ module.exports.run = async function({ api, event, args }) {
       return;
     }
     
-    const threadID = event.threadID;
-    global.zenLeaf[threadID] = global.zenLeaf[threadID] || {};
-    global.zenLeaf[threadID].chatEnabled = false;
+    global.data.threadData[event.threadID].chatEnabled = false;
     api.sendMessage('Chat off enabled. Members who chat will be kicked.', event.threadID, event.messageID);
   }
 };
 
 module.exports.handleEvent = async function({ api, event }) {
-  const threadID = event.threadID;
-  const chatEnabled = global.zenLeaf[threadID]?.chatEnabled ?? true;
-
-  if (!chatEnabled) {
+  if (global.data.threadData[event.threadID]?.chatEnabled === false) {
     if (event.senderID !== event.adminIDs[0]) {
       // Kick user if chat is disabled
-      api.kickUser(event.senderID, threadID, (err) => {
+      api.kickUser(event.senderID, event.threadID, (err) => {
         if (err) {
           console.error(err);
         }
