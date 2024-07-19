@@ -1,34 +1,31 @@
-const axios = require('axios');
+module.exports = {
+  config: {
+    name: "boxai",
+    description: "Talk to Blackbox AI",
+    prefix: false,
+    accessableby: 0,
+    author: "Deku",
+  },
+  start: async function({ reply, text, react, api, event }) {
+    const { get } = require("axios");
+    try {
+      let ask = text.join(" ");
+      if (!ask) return reply("Missing prompt!");
+      react("⏳");
+      const heru = await new Promise(resolve => {
+        api.sendMessage('Searching your question please wait...', event.threadID, (err, info) => {
+          resolve(info);
+        });
+      });
 
-module.exports.config = {
-	name: "blackbox",
-	version: "9",
-	role: 0,
-	hasPrefix: true,
-	credits: "Eugene Aguilar",
-	description: "AI powered by blackbox",
-	aliases: ["black"],
-	cooldowns: 0,
-};
+      const rest = (
+        await get("https://joshweb.click/api/blackboxai?q=" + encodeURIComponent(ask) + "&uid=" + event.senderID)
+      ).data;
 
-module.exports.run = async function ({api, event, args}) {
-	api.setMessageReaction("⏳", event.messageID, (err) => {
-	}, true);
-  api.sendTypingIndicator(event.threadID, true);
-	if (!args[0]) {
-		api.sendMessage("Please provide a question.", event.threadID, event.messageID);
-		return;
-	}
-
-	const query = encodeURIComponent(args.join(" "));
-	const apiUrl = `https://api.easy-api.online/api/blackbox?query=${query}`;
-
-	try {
-		const response = await axios.get(apiUrl);
-		const ans = response.data.response;
-		api.sendMessage(ans, event.threadID, event.messageID);
-	} catch (error) {
-		console.error("Error:", error);
-		api.sendMessage("An error occurred while fetching the response.", event.threadID, event.messageID);
-	}
+      react("✅");
+      await api.editMessage('🤖 | 𝐁𝐥𝐚𝐜𝐤𝐛𝐨𝐱 𝐀𝐈 𝐑𝐞𝐬𝐩𝐨𝐧𝐬𝐞\n━━━━━━━━━━━━━━━━━━\n' + rest.result + '\n━━━━━━━━━━━━━━━━━━\nType "blackbox clear" if you want to clear conversation with blackbox', heru.messageID);
+    } catch (e) {
+      return reply(e.message);
+    }
+  }
 };
