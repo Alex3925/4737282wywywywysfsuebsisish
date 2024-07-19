@@ -1,48 +1,61 @@
-const axios = require('axios');
-const fs = require('fs-extra');
+const { writeFileSync, existsSync, mkdirSync } = require("fs");
+const { join } = require("path");
+const axios = require("axios");
+const tinyurl = require('tinyurl');
 
-module.exports.config = {
-  name: "4k",
-  version: "1.0.",
-  role: 0,
-  hasPermision: 0,
-  credits: "cliff", //api by hazey
-  description: "enhance your photo ",
-  hasPrefix: false,
-  usePrefix: false,
-  commandCategory: "image",
-  usages: "[reply to image]",
-  cooldowns: 2,
-  cooldown: 2,
-  aliases: ["rem","4k"],
-  usage: "replying photo"
-};
+module.exports = {
+  info: {
+    name: "4k",
+    aliases: [remini],[enhance]
+    version: "2.0",
+    author: "Vex_Kshitiz",
+    cooldowns: 20,
+    role: 2,
+    shortDescription: "remini",
+    longDescription: "enhance the image quality",
+    category: "tool",
+    guide: {
+      en: "{p}remini (reply to image)",
+    }
+  },
 
-module.exports.run = async ({ api, event, args }) => {
-  let pathie = __dirname + `/../cache/remove_bg.jpg`;
-  const { threadID, messageID } = event;
+  async execute({ api, event, args }) {
+    api.setMessageReaction("🕐", event.messageID, (err) => {}, true);
+    const { type, messageReply } = event;
+    const { attachments, threadID, messageID } = messageReply || {};
 
-  let photoUrl = event.messageReply ? event.messageReply.attachments[0].url : args.join(" ");
+    if (type === "message_reply" && attachments) {
+      const [attachment] = attachments;
+      const { url, type: attachmentType } = attachment || {};
 
-  if (!photoUrl) {
-    api.sendMessage("📸 Please reply to a photo to process and remove backgrounds.", threadID, messageID);
-    return;
+      if (!attachment || !["photo", "sticker"].includes(attachmentType)) {
+        return api.sendMessage("❌ | Reply must be an image.", event.threadID);
+      }
+
+      try {
+        const shortUrl = await tinyurl.shorten(url);
+        const { data } = await axios.get(`https://vex-kshitiz.vercel.app/upscale?url=${encodeURIComponent(shortUrl)}`, {
+          responseType: "json"
+        });
+
+        const imageUrl = data.result_url;
+        const imageResponse = await axios.get(imageUrl, { responseType: "arraybuffer" });
+
+        const cacheDir = join(__dirname, "cache");
+        if (!existsSync(cacheDir)) {
+          mkdirSync(cacheDir, { recursive: true });
+        }
+
+        const imagePath = join(cacheDir, "remi_image.png");
+        writeFileSync(imagePath, imageResponse.data);
+
+        api.sendMessage({ attachment: fs.createReadStream(imagePath) }, event.threadID);
+      } catch (error) {
+        console.error(error);
+        api.sendMessage("❌ | Error occurred while enhancing image.", event.threadID);
+      }
+    } else {
+      api.sendMessage("❌ | Please reply to an image.", event.threadID);
+    }
   }
-
-  try {
-    api.sendMessage("🕟 | Upscaling Image, Please wait for a moment..", threadID, messageID);
-    const response = await axios.get(`https://hazee-upscale.replit.app/upscale?url=${encodeURIComponent(photoUrl)}&face_enhance=true`);
-    const processedImageURL = response.data.hazescale;
-
-    const img = (await axios.get(processedImageURL, { responseType: "arraybuffer"})).data;
-
-    fs.writeFileSync(pathie, Buffer.from(img, 'binary'));
-
-    api.sendMessage({
-      body: "🔮 Image Successfully Enhanced",
-      attachment: fs.createReadStream(pathie)
-    }, threadID, () => fs.unlinkSync(pathie), messageID);
-  } catch (error) {
-    api.sendMessage(`Error processing image: ${error}`, threadID, messageID);
-  };
 };
