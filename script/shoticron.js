@@ -57,7 +57,7 @@ module.exports = {
         api.sendMessage("AUTO SHOTI SENT 🥵", event.threadID, event.messageID);
         this.run({ api, event, args: [] });
       }
-    }, 3600000); // 1 hour interval
+    }, 600000); // 10 minutes interval
   },
 
   handleEvent: async ({ api, event }) => {
