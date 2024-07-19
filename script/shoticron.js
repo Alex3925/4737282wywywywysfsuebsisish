@@ -61,10 +61,10 @@ module.exports = {
   },
 
   handleEvent: async ({ api, event }) => {
-    if (event.body === 'hoticron on') {
+    if (event.body === 'shoticron on') {
       this.autoExecute = true;
       api.sendMessage('Auto execute turned on!', event.threadID, event.messageID);
-    } else if (event.body === 'hoticron off') {
+    } else if (event.body === 'shoticron off') {
       this.autoExecute = false;
       api.sendMessage('Auto execute turned off!', event.threadID, event.messageID);
     }
