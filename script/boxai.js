@@ -4,22 +4,19 @@ module.exports = {
     description: "Talk to Blackbox AI",
     prefix: false,
     accessableby: 0,
+    category: "Utilities",
     author: "Deku",
   },
-  start: async function({ reply, text, react, api, event }) {
-    const { get } = require("axios");
+  start: async function({ api, event, text, react, reply, getLang }) {
+    const axios = require("axios");
     try {
       let ask = text.join(" ");
       if (!ask) return reply("Missing prompt!");
       react("⏳");
-      const heru = await new Promise(resolve => {
-        api.sendMessage('Searching your question please wait...', event.threadID, (err, info) => {
-          resolve(info);
-        });
-      });
+      const heru = await api.sendMessage('Searching your question please wait...', event.threadID);
 
       const rest = (
-        await get("https://joshweb.click/api/blackboxai?q=" + encodeURIComponent(ask) + "&uid=" + event.senderID)
+        await axios.get("https://joshweb.click/api/blackboxai?q=" + encodeURIComponent(ask) + "&uid=" + event.senderID)
       ).data;
 
       react("✅");
