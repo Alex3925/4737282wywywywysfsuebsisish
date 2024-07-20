@@ -1,22 +1,16 @@
-const axios = require("axios");
-const fs = require("fs-extra");
-
 module.exports = {
-  info: {
+  config: {
     name: 'anime',
     version: '1.0',
+    description: 'Anime recommendations by genre',
     author: 'Kshitiz',
     cooldowns: 20,
     role: 0,
-    shortDescription: 'Anime recommendations by genre',
-    longDescription: '',
-    category: 'media',
-    guide: {
-      en: '{p}anime {genre}:- shonen | seinen | isekai',
-    }
+    category: 'edia',
+    usage: '{p}anime {genre}:- shonen | seinen | isekai',
   },
 
-  async execute({ api, event, args }) {
+  async run({ api, event, args }) {
     const messageBody = event.body.toLowerCase().trim();
     if (messageBody === 'anime') {
       await api.sendMessage('Please specify genre.\n{p}anime {genre}:- shonen | seinen | isekai', event.threadID);
@@ -25,9 +19,9 @@ module.exports = {
 
     let genre;
     if (messageBody.includes('shonen')) {
-      genre = 'shonen';
+      genre = 'honen';
     } else if (messageBody.includes('seinen')) {
-      genre = 'seinen';
+      genre = 'einen';
     } else if (messageBody.includes('isekai')) {
       genre = 'isekai';
     } else {
@@ -36,7 +30,7 @@ module.exports = {
     }
 
     try {
-      const loadingMessage = await api.sendMessage('𝗟𝗢𝗔𝗗𝗜𝗡𝗚 𝗥𝗔𝗡𝗗𝗢𝗠 𝗔𝗡𝗜𝗠𝗘 𝗥𝗘𝗖𝗢𝗠𝗠𝗘𝗡𝗗𝗔𝗧𝗜𝗢𝗡..', event.threadID);
+      const loadingMessage = await api.sendMessage('𝗟𝗢𝗔𝗗𝗜𝗡𝗚 𝗥𝗔𝗡𝗗𝗢𝗠 𝗔𝗡𝗜𝗠𝗘 𝗥𝗘𝗖𝗢𝗠𝗠𝗘𝗡𝗗𝗢𝗧𝗜𝗢𝗡..', event.threadID);
 
       const apiUrl = `https://anime-reco.vercel.app/anime?genre=${genre}`;
       const response = await axios.get(apiUrl);
@@ -48,7 +42,7 @@ module.exports = {
         console.log(`${animeName}`);
         console.log(`${videoUrl}`);
 
-        const cacheFilePath = __dirname + `/cache/anime_${Date.now()}.mp4`;
+        const cacheFilePath = path.join(__dirname, `/cache/anime_${Date.now()}.mp4`);
         await this.downloadVideo(videoUrl, cacheFilePath);
 
         if (fs.existsSync(cacheFilePath)) {
