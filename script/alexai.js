@@ -23,23 +23,27 @@ module.exports = {
           { url: 'https://markdevs-last-api.onrender.com/api/v3/gpt4', params: { ask: ask } }
         ];
 
+        let sent = false;
         for (const service of services) {
           axios.get(service.url, { params: service.params })
             .then(response => {
               const rest = response.data;
               if (rest && (rest.gpt4 || rest.reply || rest.response || rest.answer || rest.message)) {
                 const response = rest.gpt4 || rest.reply || rest.response || rest.answer || rest.message;
-                api.sendMessage(
-                  `⚔⚔ | Alex 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━━`,
-                  event.threadID,
-                  heru
-                );
-              } else {
-                throw new Error("No valid response from AI");
+                if (!sent) {
+                  api.sendMessage(
+                    `⚔⚔ | Alex 𝙰𝚒\n━━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━━`,
+                    event.threadID,
+                    heru
+                  );
+                  sent = true;
+                }
               }
             })
             .catch(error => {
-              api.sendMessage(error.message, event.threadID, event.messageID);
+              if (!sent) {
+                api.sendMessage(error.message, event.threadID, event.messageID);
+              }
             });
         }
       });
