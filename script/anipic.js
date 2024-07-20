@@ -1,46 +1,57 @@
 const fs = require("fs");
 const axios = require("axios");
+const path = require("path");
 
 module.exports = {
-  info: {
+  config: {
     name: "anipic",
     aliases: [],
-    author: "kshitiz",
     version: "1.0",
+    description: {
+      en: "Get a random anime picture"
+    },
+    author: "kshitiz",
     cooldowns: 5,
     role: 0,
-    shortDescription: {
+    category: "MEDIA",
+    usage: {
       en: ""
     },
-    longDescription: {
-      en: "get a random anime picture"
-    },
-    category: "𝗠𝗘𝗗𝗜𝗔",
     guide: {
       en: ""
     }
   },
-  async execute({ api, event }) {
-    let path = __dirname + "/cache/anipic_image.png";
+
+  async run({ api, event }) {
+    const cacheFilePath = path.join(__dirname, `/cache/anipic_image_${Date.now()}.png`);
 
     try {
-      let response = await axios.get("https://pic.re/image", { responseType: "stream" });
+      const response = await axios.get("https://pic.re/image", { responseType: "stream" });
 
       if (response.data) {
-        let imageResponse = response.data;
-        imageResponse.pipe(fs.createWriteStream(path));
+        const writer = fs.createWriteStream(cacheFilePath);
+        response.data.pipe(writer);
 
-        imageResponse.on("end", () => {
-          api.sendMessage({
-            body: "",
-            attachment: fs.createReadStream(path)
-          }, event.threadID, () => fs.unlinkSync(path));
+        return new Promise((resolve, reject) => {
+          writer.on('finish', async () => {
+            try {
+              await api.sendMessage({
+                body: "",
+                attachment: fs.createReadStream(cacheFilePath)
+              }, event.threadID);
+              fs.unlinkSync(cacheFilePath);
+            } catch (error) {
+              console.error(error);
+            }
+          });
+          writer.on('error', reject);
         });
       } else {
         return api.sendMessage("Failed to fetch random anime picture. Please try again.", event.threadID);
       }
-    } catch (e) {
-      return api.sendMessage(e.message, event.threadID);
+    } catch (error) {
+      console.error(error);
+      return api.sendMessage("An error occurred while processing the anipic command.", event.threadID);
     }
   }
 };
