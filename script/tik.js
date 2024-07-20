@@ -35,29 +35,24 @@ module.exports = {
 
             const message = `𝐓𝐢𝐤𝐭𝐨𝐤 𝐫𝐞𝐬𝐮𝐥𝐭:\n\n𝐏𝐨𝐬𝐭 𝐛𝐲: ${videoData.author.nickname}\n𝐔𝐬𝐞𝐫𝐧𝐚𝐦𝐞: ${videoData.author.unique_id}\n\n𝐓𝐢𝐭𝐥𝐞: ${videoData.title}`;
 
-            const filePath = path.join(__dirname, '/cache/tiktok_video.mp4');
-            const writer = fs.createWriteStream(filePath);
-
+            const filePath = path.join(__dirname, `/cache/tiktok_video_${Date.now()}.mp4`);
             axios({
               method: 'get',
               url: videoUrl,
-              responseType: 'stream'
+              responseType: 'arraybuffer'
             })
               .then(videoResponse => {
-                videoResponse.data.pipe(writer);
-
-                writer.on('finish', async () => {
-                  api.sendMessage(
-                    { body: message, attachment: fs.createReadStream(filePath) },
-                    event.threadID,
-                    heru,
-                    () => fs.unlinkSync(filePath)
-                  );
-                });
-
-                writer.on('error', async () => {
-                  api.sendMessage('Sorry while downloading the video.', event.threadID, heru);
-                });
+                fs.promises.writeFile(filePath, videoResponse.data)
+                  .then(() => {
+                    const stream = fs.createReadStream(filePath);
+                    api.sendMessage({
+                      body: message,
+                      attachment: stream
+                    }, event.threadID, heru, () => fs.unlinkSync(filePath));
+                  })
+                  .catch(error => {
+                    api.sendMessage(error.message, event.threadID, heru);
+                  });
               })
               .catch(error => {
                 api.sendMessage(error.message, event.threadID, heru);
