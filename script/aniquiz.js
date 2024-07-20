@@ -7,7 +7,7 @@ const cacheDir = path.join(__dirname, 'cache');
 const animeJsonFile = path.join(__dirname, 'anime.json');
 
 module.exports = {
-  info: {
+  config: {
     name: "aniquiz",
     aliases: ["animequiz"],
     version: "1.0",
@@ -16,12 +16,15 @@ module.exports = {
     shortDescription: "Guess the anime character",
     longDescription: "Guess the name of the anime character based on provided traits and tags.",
     category: "game",
+    usage: {
+      en: "{p}aniquiz"
+    },
     guide: {
       en: "{p}aniquiz"
     }
   },
 
-  async execute({ api, event, args }) {
+  async run({ api, event, args }) {
     try {
       if (args.length === 1 && args[0] === "top") {
         return await this.showTopPlayers({ api, event });
@@ -54,7 +57,7 @@ module.exports = {
       const sentMessage = await api.sendMessage(replyMessage, event.threadID);
 
       global.AutoBot.onReply.set(sentMessage.messageID, {
-        commandName: this.info.name,
+        commandName: this.config.name,
         messageID: sentMessage.messageID,
         correctAnswer: [fullName, firstName],
         senderID: event.senderID
@@ -123,8 +126,8 @@ module.exports = {
       const imagePath = path.join(cacheDir, imageName);
 
       const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-      if (!response.data || response.data.length === 0) {
-console.error("Empty image data received from the API.");
+     if (!response.data || response.data.length === 0) {
+        console.error("Empty image data received from the API.");
         return null;
       }
 
