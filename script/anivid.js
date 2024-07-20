@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = {
-  info: {
+  config: {
     name: "anivid",
     aliases: [],
     author: "Kshitiz",
@@ -13,13 +13,18 @@ module.exports = {
     shortDescription: "Get random anime video",
     longDescription: "Get random anime video from provided API",
     category: "fun",
-    guide: "{p}anivid",
+    usage: {
+      en: "{p}anivid"
+    },
+    guide: {
+      en: "{p}anivid"
+    }
   },
 
-  async execute({ api, event, args }) {
-    api.setMessageReaction("🕐", event.threadID, (err) => {}, true);
-
+  async run({ api, event, args }) {
     try {
+      api.setMessageReaction("🕐", event.messageID, (err) => {}, true);
+
       const response = await axios.get("https://ani-vid-0kr2.onrender.com/kshitiz");
       const postData = response.data.posts;
       const randomIndex = Math.floor(Math.random() * postData.length);
@@ -29,24 +34,21 @@ module.exports = {
 
       const selectedUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
 
-      const videoResponse = await axios.get(selectedUrl, { responseType: "stream" });
+      const videoResponse = await axios.get(selectedUrl, { responseType: "arraybuffer" });
 
       const tempVideoPath = path.join(__dirname, "cache", `${Date.now()}.mp4`);
-      const writer = fs.createWriteStream(tempVideoPath);
-      videoResponse.data.pipe(writer);
+      await fs.promises.writeFile(tempVideoPath, videoResponse.data);
 
-      writer.on("finish", async () => {
-        const stream = fs.createReadStream(tempVideoPath);
-        const user = response.data.user || "@user_unknown";
-        await api.sendMessage({
-          body: `Random anime Video.`,
-          attachment: stream,
-        }, event.threadID);
-        api.setMessageReaction("✅", event.threadID, (err) => {}, true);
-        fs.unlink(tempVideoPath, (err) => {
-          if (err) console.error(err);
-          console.log(`Deleted ${tempVideoPath}`);
-        });
+      const stream = fs.createReadStream(tempVideoPath);
+      const user = response.data.user || "@user_unknown";
+      await api.sendMessage({
+        body: `Random anime Video.`,
+        attachment: stream,
+      }, event.threadID);
+      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
+      fs.unlink(tempVideoPath, (err) => {
+        if (err) console.error(err);
+        console.log(`Deleted ${tempVideoPath}`);
       });
     } catch (error) {
       console.error(error);
