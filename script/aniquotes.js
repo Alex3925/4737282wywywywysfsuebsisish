@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = {
-  info: {
+  config: {
     name: "animequotes",
     aliases: ["aniquote"],
     author: "Kshitiz",
@@ -13,30 +13,32 @@ module.exports = {
     shortDescription: "Get random anime quotes vdot",
     longDescription: "Get random anime quotes vdo",
     category: "anime",
-    guide: "{p}animequotes",
+    usage: {
+      en: "{p}animequotes"
+    },
+    guide: {
+      en: "{p}animequotes"
+    }
   },
 
-  async execute({ api, event, args }) {
-    api.setMessageReaction("🕐", event.messageID, (err) => {}, true);
-
+  async run({ api, event, args }) {
     try {
-      const response = await axios.get(`https://aniquotes-klos.onrender.com/kshitiz`, { responseType: "stream" });
+      api.setMessageReaction("🕐", event.messageID, (err) => {}, true);
+
+      const response = await axios.get(`https://aniquotes-klos.onrender.com/kshitiz`, { responseType: "arraybuffer" });
 
       const tempVideoPath = path.join(__dirname, "cache", `${Date.now()}.mp4`);
 
-      const writer = fs.createWriteStream(tempVideoPath);
-      response.data.pipe(writer);
+      await fs.promises.writeFile(tempVideoPath, response.data);
 
-      writer.on("finish", async () => {
-        const stream = fs.createReadStream(tempVideoPath);
+      const stream = fs.createReadStream(tempVideoPath);
 
-        api.sendMessage({
-          body: `Random Anime Quotes`,
-          attachment: stream,
-        }, event.threadID);
+      api.sendMessage({
+        body: `Random Anime Quotes`,
+        attachment: stream,
+      }, event.threadID);
 
-        api.setMessageReaction("✅", event.messageID, (err) => {}, true);
-      });
+      api.setMessageReaction("✅", event.messageID, (err) => {}, true);
     } catch (error) {
       console.error(error);
       api.sendMessage("Sorry, an error occurred while processing your request.", event.threadID);
