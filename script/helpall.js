@@ -55,4 +55,60 @@ module.exports = {
         "https://i.imgur.com/uB4nTr7.gif"
       ];
 
-      const helpListImage
+      const helpListImage= helpListImages[Math.floor(Math.random() * helpListImages.length)];
+
+      await api.sendMessage({
+        body: msg,
+        attachment: await global.utils.getStreamFromURL(helpListImage)
+      }, event.threadID);
+    } else {
+      const commandName = args[0].toLowerCase();
+      const command = commands.get(commandName) || commands.get(aliases.get(commandName));
+
+      if (!command) {
+        return api.sendMessage(`Command "${commandName}" not found.`, event.threadID);
+      }
+
+      const configCommand = command.config;
+      const roleText = roleTextToString(configCommand.role);
+      const author = configCommand.author || "Unknown";
+
+      const longDescription = configCommand.longDescription ? configCommand.longDescription.en || "No description" : "No description";
+
+      const guideBody = configCommand.guide?.en || "No guide available.";
+      const usage = guideBody.replace(/{p}/g, prefix).replace(/{n}/g, configCommand.name);
+
+      const response = `╭── NAME ────⭓
+  │ ${configCommand.name}
+  ├── INFO
+  │ Description: ${longDescription}
+  │ Other names: ${configCommand.aliases ? configCommand.aliases.join(", ") : "Do not have"}
+  │ Other names in your group: Do not have
+  │ Version: ${configCommand.version || "1.0"}
+  │ Role: ${roleText}
+  │ Time per command: ${configCommand.countDown || 1}s
+  │ Author: ${author}
+  ├── Usage
+  │ ${usage}
+  ├── Notes
+  │ The content inside <XXXXX> can be changed
+  │ The content inside [a|b|c] is a or b or c
+  ╰━━━━━━━❖`;
+
+      await api.sendMessage(response, event.threadID);
+    }
+  },
+};
+
+function roleTextToString(roleText) {
+  switch (roleText) {
+    case 0:
+      return "0 (All users)";
+    case 1:
+      return "1 (Group administrators)";
+    case 2:
+      return "2 (Admin bot)";
+    default:
+      return "Unknown role";
+  }
+}
