@@ -8,7 +8,7 @@ module.exports = {
     role: 0,
   },
 
-  const doNotDelete = "[ 義 𝗚𝗶𝘆𝘂 | 🌊 勇 ]";
+  const doNotDelete = "[ ☯︎ 𝗔𝗹𝗲𝘅 ✿︎| 🔥  ]";
 
   async run({ api, event, args }) {
     const { threadID } = event;
