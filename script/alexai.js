@@ -1,6 +1,6 @@
 module.exports = {
   config: {
-    name: "ai",
+    name: "alexai",
     version: "1.0",
     description: "Talk to Alex AI",
     category: "AI",
