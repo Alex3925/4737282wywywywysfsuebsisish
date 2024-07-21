@@ -1,6 +1,6 @@
 module.exports = {
   config: {
-    name: "help",
+    name: "helpall",
     version: "1.17",
     description: "View command usage",
     category: "info",
