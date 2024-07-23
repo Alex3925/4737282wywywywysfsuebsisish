@@ -222,27 +222,75 @@ video {
   }
 }
 
-#video-container {
-  width: 100%;
-  height: 100%;
-  margin-bottom: 20px;
+#listOfCommands {
   display: flex;
-}
-
-#video {
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  width: 100%;
-  border-radius: 10px;
-  height: 100%;
-  object-fit: cover;
-  margin: auto;
+  margin-top: 20px;
+  gap: 10px;
+  overflow-y: scroll;
+  height: 300px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-#json-data {
-  background-image: url('https://i.ibb.co/hffhZhD/438312467.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
+#listOfCommands::-webkit-scrollbar {
+  display: none;
+}
+
+#listOfCommands li {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px 20px;
+  border-radius: 10px;
+  gap: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+#listOfCommands li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 10px rgba(255, 255, 255, 0.2);
+}
+
+#listOfCommands li span {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#listOfCommands li span.rgb {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+#listOfCommands li span.rgb span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+#listOfCommands li span.rgb span.red {
+  background-color: rgba(255, 0, 0, 0.8);
+}
+
+#listOfCommands li span.rgb span.green {
+  background-color: rgba(0, 255, 0, 0.8);
+}
+
+#listOfCommands li span.rgb span.blue {
+  background-color: rgba(0, 0, 255, 0.8);
+}
+
+@keyframes animate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(-360deg);
+  }
 }
