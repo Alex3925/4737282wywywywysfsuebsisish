@@ -5,13 +5,14 @@ module.exports = {
     name: 'restart',
     version: '2.0',
     role: 2, // Accessible by owner
-    cooldown: 5,
-    description: {
-      vi: 'Khởi động lại bot',
-      en: 'Restart bot',
-    },
-    usages: '{pn} Restart',
+    hasPrefix: false,
+    aliases: [],
+    description: 'Restart bot',
+    usage: '{pn} Restart',
+    cooldowns: 5,
+    credits: 'Developer'
   },
+
   languages: {
     vi: {
       restarting: '|Khởi động lại bot...',
@@ -21,7 +22,7 @@ module.exports = {
     },
   },
 
-  onLoad: async ({ api }) => {
+  onLoad: async ({ api, event }) => {
     const pathFile = `${__dirname}/tmp/restart.txt`;
     if (fs.existsSync(pathFile)) {
       const [tid, time] = fs.readFileSync(pathFile, 'utf-8').split(' ');
@@ -30,11 +31,12 @@ module.exports = {
     }
   },
 
-  run: async ({ api, event, args, getLang, react }) => {
+  run: async ({ api, event, args, getLang }) => {
     const pathFile = `${__dirname}/tmp/restart.txt`;
     fs.writeFileSync(pathFile, `${event.threadID} ${Date.now()}`);
     api.sendMessage(getLang('restarting'), event.threadID, event.messageID);
-    react('⏳');
-    process.exit(2);
+    api.setMessageReaction("⏳", event.messageID, () => {
+      process.exit(2);
+    });
   },
 };
