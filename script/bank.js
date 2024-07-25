@@ -36,7 +36,7 @@ function deductMoneyFromTopUsers(topUsers, amount) {
 module.exports.config = {
   name: "bank",
   version: "2.31",
-  author: "LiANE | ArYAN",
+  author: "LiANE | ArYAN", //convert by ALex
   role: 0,
   description: "The bank command provides various banking services including games.",
   usage: "bank [command] [amount] [recipientUID]",
