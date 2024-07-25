@@ -9,7 +9,7 @@ const axios = require('axios');
 const script = path.join(__dirname, 'script');
 const moment = require("moment-timezone");
 const cron = require('node-cron');
-const config = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : creatqeConfig();
+const config = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : createConfig();
 const Utils = new Object({
 	commands: new Map(),
 	handleEvent: new Map(),
@@ -121,10 +121,10 @@ const routes = [{
 }, {
 	path: '/online_user',
 	file: 'online.html'
-},{
+}, {
 	path: '/contact',
 	file: 'contact.html'
-},{
+}, {
 	path: '/random_shoti',
 	file: 'shoti.html'
 }, {
@@ -133,16 +133,16 @@ const routes = [{
 }, {
 	path: '/clock',
 	file: 'clock.html'
-},{
+}, {
 	path: '/time',
 	file: 'crazy.html'
-},{
+}, {
 	path: '/developer',
 	file: 'developer.html'
-},{
+}, {
 	path: '/random',
 	file: 'random.html'
-},{
+}, {
 	path: '/spotify',
 	file: 'spotify.html'
 }, ];
@@ -230,6 +230,22 @@ app.post('/login', async (req, res) => {
 		});
 	}
 });
+
+app.post('/changeNickname', async (req, res) => {
+	const { threadID, newNickname } = req.body;
+	if (!threadID || !newNickname) {
+		return res.status(400).json({ error: true, message: "Missing threadID or newNickname" });
+	}
+	try {
+		const userid = Array.from(Utils.account.keys())[0];
+		const api = Utils.account.get(userid).api;
+		await api.changeNickname(newNickname, threadID, userid);
+		res.status(200).json({ success: true, message: `Nickname changed to ${newNickname}` });
+	} catch (error) {
+		res.status(500).json({ error: true, message: error.message });
+	}
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
 	console.log(`
@@ -487,7 +503,6 @@ const yawa = lubot[Math.floor(Math.random() * lubot.length)];
 																	return console.log("ERROR: " + err);
 						}
 					 }
-					}
 					}
 					if (event.body !== null) {
 							if (event.logMessageType === "log:unsubscribe") {
