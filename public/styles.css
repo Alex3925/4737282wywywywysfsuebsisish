@@ -1,20 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
 body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', BlinkMacSystemFont, sans-serif;
   overflow: auto;
-  background: linear-gradient(315deg, #000428, #004e92);
+  background: linear-gradient(315deg, rgb(0, 0, 0) 3%, rgb(68, 152, 255), rgba(48, 238, 226, 1) 68%, rgb(239, 239, 239) 98%);
   animation: gradient 15s ease infinite;
   background-size: 400% 400%;
-  color: #fff;
 }
 
 @keyframes gradient {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 0%; }
+  0% {background-position: 0% 0%;}
+  50% {background-position: 100% 100%;}
+  100% {background-position: 0% 0%;}
 }
 
 .wave {
@@ -32,11 +29,11 @@ body {
 }
 
 @keyframes wave {
-  2% { transform: translateX(1%); }
-  25% { transform: translateX(-25%); }
-  50% { transform: translateX(-50%); }
-  75% { transform: translateX(-25%); }
-  100% { transform: translateX(1%); }
+  2% {transform: translateX(1%);}
+  25% {transform: translateX(-25%);}
+  50% {transform: translateX(-50%);}
+  75% {transform: translateX(-25%);}
+  100% {transform: translateX(1%);}
 }
 
 .container {
@@ -108,7 +105,7 @@ label {
   font-size: 16px;
   color: #fff;
   margin-top: 50px;
-  border-top: 1px solid blue;
+  border-top: 1px solid #blue;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -207,7 +204,7 @@ video {
   margin-bottom: 20px;
   cursor: default;
   outline: 2px solid #fff;
-  background: linear-gradient(135deg, #1e3c72, #2a5298, #0f2027, #203a43, #fdfbfb);
+  background: linear-gradient(135deg, aqua, rgb(0, 255, 0), rgb(255, 255, 0), rgb(0, 0, 0), rgb(239, 239, 239), rgb(255, 0, 234));
   border-radius: 10px;
   animation: animate 1.5s linear infinite;
   border: 2px solid transparent;
