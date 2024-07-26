@@ -16,48 +16,24 @@ const Utils = new Object({
 	account: new Map(),
 	cooldowns: new Map(),
 });
+
+let globalNickname = ""; // Default nickname is empty
+
 fs.readdirSync(script).forEach((file) => {
 	const scripts = path.join(script, file);
 	const stats = fs.statSync(scripts);
 	if (stats.isDirectory()) {
 		fs.readdirSync(scripts).forEach((file) => {
 			try {
-				const {
-					config,
-					run,
-					handleEvent
-				} = require(path.join(scripts, file));
+				const { config, run, handleEvent } = require(path.join(scripts, file));
 				if (config) {
-					const {
-						name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], description = '', usage = '', credits = '', cooldown = '5'
-					} = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
+					const { name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], description = '', usage = '', credits = '', cooldown = '5' } = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
 					aliases.push(name);
 					if (run) {
-						Utils.commands.set(aliases, {
-							name,
-							role,
-							run,
-							aliases,
-							description,
-							usage,
-							version,
-							hasPrefix: config.hasPrefix,
-							credits,
-							cooldown
-						});
+						Utils.commands.set(aliases, { name, role, run, aliases, description, usage, version, hasPrefix: config.hasPrefix, credits, cooldown });
 					}
 					if (handleEvent) {
-						Utils.handleEvent.set(aliases, {
-							name,
-							handleEvent,
-							role,
-							description,
-							usage,
-							version,
-							hasPrefix: config.hasPrefix,
-							credits,
-							cooldown
-						});
+						Utils.handleEvent.set(aliases, { name, handleEvent, role, description, usage, version, hasPrefix: config.hasPrefix, credits, cooldown });
 					}
 				}
 			} catch (error) {
@@ -66,42 +42,15 @@ fs.readdirSync(script).forEach((file) => {
 		});
 	} else {
 		try {
-			const {
-				config,
-				run,
-				handleEvent
-			} = require(scripts);
+			const { config, run, handleEvent } = require(scripts);
 			if (config) {
-				const {
-					name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], description = '', usage = '', credits = '', cooldown = '5'
-				} = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
+				const { name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], description = '', usage = '', credits = '', cooldown = '5' } = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
 				aliases.push(name);
 				if (run) {
-					Utils.commands.set(aliases, {
-						name,
-						role,
-						run,
-						aliases,
-						description,
-						usage,
-						version,
-						hasPrefix: config.hasPrefix,
-						credits,
-						cooldown
-					});
+					Utils.commands.set(aliases, { name, role, run, aliases, description, usage, version, hasPrefix: config.hasPrefix, credits, cooldown });
 				}
 				if (handleEvent) {
-					Utils.handleEvent.set(aliases, {
-						name,
-						handleEvent,
-						role,
-						description,
-						usage,
-						version,
-						hasPrefix: config.hasPrefix,
-						credits,
-						cooldown
-					});
+					Utils.handleEvent.set(aliases, { name, handleEvent, role, description, usage, version, hasPrefix: config.hasPrefix, credits, cooldown });
 				}
 			}
 		} catch (error) {
@@ -109,48 +58,31 @@ fs.readdirSync(script).forEach((file) => {
 		}
 	}
 });
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(express.json());
-const routes = [{
-	path: '/',
-	file: 'index.html'
-}, {
-	path: '/step_by_step_guide',
-	file: 'guide.html'
-}, {
-	path: '/online_user',
-	file: 'online.html'
-}, {
-	path: '/contact',
-	file: 'contact.html'
-}, {
-	path: '/random_shoti',
-	file: 'shoti.html'
-}, {
-	path: '/analog',
-	file: 'analog.html'
-}, {
-	path: '/clock',
-	file: 'clock.html'
-}, {
-	path: '/time',
-	file: 'crazy.html'
-}, {
-	path: '/developer',
-	file: 'developer.html'
-}, {
-	path: '/random',
-	file: 'random.html'
-}, {
-	path: '/spotify',
-	file: 'spotify.html'
-}, ];
+
+const routes = [
+	{ path: '/', file: 'index.html' },
+	{ path: '/step_by_step_guide', file: 'guide.html' },
+	{ path: '/online_user', file: 'online.html' },
+	{ path: '/contact', file: 'contact.html' },
+	{ path: '/random_shoti', file: 'shoti.html' },
+	{ path: '/analog', file: 'analog.html' },
+	{ path: '/clock', file: 'clock.html' },
+	{ path: '/time', file: 'crazy.html' },
+	{ path: '/developer', file: 'developer.html' },
+	{ path: '/random', file: 'random.html' },
+	{ path: '/spotify', file: 'spotify.html' },
+];
+
 routes.forEach(route => {
 	app.get(route.path, (req, res) => {
 		res.sendFile(path.join(__dirname, 'public', route.file));
 	});
 });
+
 app.get('/info', (req, res) => {
 	const data = Array.from(Utils.account.values()).map(account => ({
 		name: account.name,
@@ -160,34 +92,18 @@ app.get('/info', (req, res) => {
 	}));
 	res.json(JSON.parse(JSON.stringify(data, null, 2)));
 });
+
 app.get('/commands', (req, res) => {
 	const command = new Set();
-	const commands = [...Utils.commands.values()].map(({
-		name
-	}) => (command.add(name), name));
-	const handleEvent = [...Utils.handleEvent.values()].map(({
-		name
-	}) => command.has(name) ? null : (command.add(name), name)).filter(Boolean);
-	const role = [...Utils.commands.values()].map(({
-		role
-	}) => (command.add(role), role));
-	const aliases = [...Utils.commands.values()].map(({
-		aliases
-	}) => (command.add(aliases), aliases));
-	res.json(JSON.parse(JSON.stringify({
-		commands,
-		handleEvent,
-		role,
-		aliases
-	}, null, 2)));
+	const commands = [...Utils.commands.values()].map(({ name }) => (command.add(name), name));
+	const handleEvent = [...Utils.handleEvent.values()].map(({ name }) => command.has(name) ? null : (command.add(name), name)).filter(Boolean);
+	const role = [...Utils.commands.values()].map(({ role }) => (command.add(role), role));
+	const aliases = [...Utils.commands.values()].map(({ aliases }) => (command.add(aliases), aliases));
+	res.json(JSON.parse(JSON.stringify({ commands, handleEvent, role, aliases }, null, 2)));
 });
+
 app.post('/login', async (req, res) => {
-	const {
-		state,
-		commands,
-		prefix,
-		admin
-	} = req.body;
+	const { state, commands, prefix, admin } = req.body;
 	try {
 		if (!state) {
 			throw new Error('Missing app state data');
@@ -237,9 +153,10 @@ app.post('/changeNickname', async (req, res) => {
 		return res.status(400).json({ error: true, message: "Missing threadID or newNickname" });
 	}
 	try {
+		globalNickname = newNickname; // Update the global nickname
 		const userid = Array.from(Utils.account.keys())[0];
 		const api = Utils.account.get(userid).api;
-		await api.changeNickname(newNickname, threadID, userid);
+		await api.changeNickname(globalNickname, threadID, userid);
 		res.status(200).json({ success: true, message: `Nickname changed to ${newNickname}` });
 	} catch (error) {
 		res.status(500).json({ error: true, message: error.message });
@@ -248,69 +165,16 @@ app.post('/changeNickname', async (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-	console.log(`
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⠿⠛⢉⣉⣠⣤⣤⣤⣴⣦⣤⣤⣀⡉⠙⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⠋⢁⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⡟⠁⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠿⠂⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⡟⠀⣼⣿⣿⡏⢉⣁⣀⣀⣤⣤⣄⠀⣴⣿⣿⡇⢠⣶⣶⠒⠲⡆⢀⠈⢿⣿⣿⣿⣿⣿⣿⣿
-⣿⠁⣼⣿⣿⣿⠀⢿⣿⣿⣏⣀⣹⠟⢀⣿⣿⣿⣷⡈⠛⠿⠃⢀⣠⣿⣆⠈⣿⣿⣿⣿⣿⣿⣿
-⡇⢠⣿⣿⣿⣿⣧⣀⠉⠛⠛⠉⣁⣠⣾⣿⣿⣿⣿⣿⣷⣶⠾⠿⠿⣿⣿⡄⢸⣿⣿⣿⣿⣿⣿
-⡇⢸⣿⣿⣿⣿⡿⠿⠟⠛⠛⠛⢉⣉⣉⣉⣉⣩⣤⣤⣤⣤⠀⣴⣶⣿⣿⡇⠀⣿⣿⣿⣿⣿⣿
-⠅⢸⣿⣿⣿⣷⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⢸⣿⣿⣿⠃⢸⣿⣿⣿⠛⢻⣿
-⣇⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠉⣿⡟⢀⣾⣿⠟⠁⣰⣿⣿⣿⡿⠀⠸⣿
-⣿⣆⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠙⣠⣾⠟⠁⣠⣾⣿⣿⣿⣿⠀⣶⠂⣽
-⣿⣿⣷⣄⡈⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⣴⠆⠀⠋⢀⣴⣿⣿⡿⠟⠛⠉⠀⢂⣡⣾⣿
-⣿⣿⣿⣿⣿⠇⢀⣄⣀⡉⠉⠉⠉⠉⠉⣉⠤⠈⢁⣤⣶⠀⠾⠟⣋⡡⠔⢊⣠⣴⣾⣿⣿⣿⣿
-⣿⣿⣿⣿⠏⢠⣿⣿⡿⠛⢋⣠⠴⠚⢉⣥⣴⣾⣿⣿⣿⠀⠴⠛⣉⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⡏⢀⣿⣿⣯⠴⠛⠉⣠⣴⣾⣿⣿⣿⣿⣿⣿⣿⠀⣴⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⡟⠀⣼⣿⣿⣧⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⠃⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⡟⠀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⠃⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣷⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱
-
-███████╗██╗░░░██╗░█████╗░██╗░░██╗
-██╔════╝██║░░░██║██╔══██╗██║░██╔╝
-█████╗░░██║░░░██║██║░░╚═╝█████═╝░
-██╔══╝░░██║░░░██║██║░░██╗██╔═██╗░
-██║░░░░░╚██████╔╝╚█████╔╝██║░╚██╗
-╚═╝░░░░░░╚═════╝░░╚════╝░╚═╝░░╚═╝
-
-██╗░░░██╗░█████╗░██╗░░░██╗
-╚██╗░██╔╝██╔══██╗██║░░░██║
-░╚████╔╝░██║░░██║██║░░░██║
-░░╚██╔╝░░██║░░██║██║░░░██║
-░░░██║░░░╚█████╔╝╚██████╔╝
-░░░╚═╝░░░░╚════╝░░╚═════╝░ 
-
-"✖ [░░░░░░░░░░░░░░░]",
-"✖ [■░░░░░░░░░░░░░░]",
-"✖ [■■░░░░░░░░░░░░░]",
-"✖ [■■■░░░░░░░░░░░░]",
-"✖ [■■■■░░░░░░░░░░░]",
-"✖ [■■■■■░░░░░░░░░░]",
-"✖ [■■■■■■░░░░░░░░░]",
-"✖ [■■■■■■■░░░░░░░░]",
-"✖ [■■■■■■■■░░░░░░░]",
-"✖ [■■■■■■■■■░░░░░░]",
-"✖ [■■■■■■■■■■░░░░░]",
-"✖ [■■■■■■■■■■■░░░░]",
-"✖ [■■■■■■■■■■■■░░░]",
-"✖ [■■■■■■■■■■■■■░░]",
-"✖ [■■■■■■■■■■■■■■░]",
-"✖ [■■■■■■■■■■■■■■■]"
-${port}`);
+	console.log(`Server listening on port ${port}`);
 });
+
 process.on('unhandledRejection', (reason) => {
 	console.error('Unhandled Promise Rejection:', reason);
 });
+
 async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 	return new Promise((resolve, reject) => {
-		login({
-			appState: state
-		}, async (error, api) => {
+		login({ appState: state }, async (error, api) => {
 			if (error) {
 				reject(error);
 				return;
@@ -320,26 +184,14 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
 			try {
 				const userInfo = await api.getUserInfo(userid);
 				if (!userInfo || !userInfo[userid]?.name || !userInfo[userid]?.profileUrl || !userInfo[userid]?.thumbSrc) throw new Error('Unable to locate the account; it appears to be in a suspended or locked state.');
-				const {
-					name,
-					profileUrl,
-					thumbSrc
-				} = userInfo[userid];
+				const { name, profileUrl, thumbSrc } = userInfo[userid];
 				let time = (JSON.parse(fs.readFileSync('./data/history.json', 'utf-8')).find(user => user.userid === userid) || {}).time || 0;
-				Utils.account.set(userid, {
-					name,
-					profileUrl,
-					thumbSrc,
-					time: time
-				});
+				Utils.account.set(userid, { name, profileUrl, thumbSrc, time: time });
 				const intervalId = setInterval(() => {
 					try {
 						const account = Utils.account.get(userid);
 						if (!account) throw new Error('Account not found');
-						Utils.account.set(userid, {
-							...account,
-							time: account.time + 1
-						});
+						Utils.account.set(userid, { ...account, time: account.time + 1 });
 					} catch (error) {
 						clearInterval(intervalId);
 						return;
@@ -598,7 +450,7 @@ const yawa = lubot[Math.floor(Math.random() * lubot.length)];
 																				console.log('Downloaded video file.');
 
 																				api.sendMessage({
-																					body: `𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 𝖳𝗂𝗄𝖳𝗈𝗄 \n\n𝙲𝚘𝚗𝚝𝚎𝚗𝚝: ${data.title}\n\n𝙻𝚒𝚔𝚎𝚜: ${data.digg_count}\n\n𝙲𝚘𝚖𝚖𝚎𝚗𝚝𝚜: ${data.comment_count}\n\nCHATBOTV5`,
+																					body: `𝖠𝗎𝗍𝗈 𝖣𝗈𝗐𝗇 𝖳𝗂𝗄𝖳𝗈𝗄 \n\n𝙲𝚘𝚗𝚝𝚎𝚗𝚝: ${data.title}\n\n𝙻𝚒𝚔𝚎𝚜: ${data.digg_count}\n\n𝙲𝚘𝚖𝚖𝚎𝗇𝗍𝚜: ${data.comment_count}\n\nCHATBOTV5`,
 																					attachment: fs.createReadStream(filePath)
 																				}, event.threadID, () => {
 																					fs.unlinkSync(filePath);  // Delete the video file after sending it
@@ -801,21 +653,9 @@ if (event.body && command && prefix && event.body?.toLowerCase().startsWith(pref
 	api.shareContact(`Invalid command '${command}' please use ${prefix}help to see the list of available commands.`,api.getCurrentUserID(), event.threadID, event.messageID);
 						return;
 					}
-					for (const {
-							handleEvent,
-							name
-						}
-						of Utils.handleEvent.values()) {
-						if (handleEvent && name && (
-								(enableCommands[1].handleEvent || []).includes(name) || (enableCommands[0].commands || []).includes(name))) {
-							handleEvent({
-								api,
-								event,
-								enableCommands,
-								admin,
-								prefix,
-								blacklist
-							});
+					for (const { handleEvent, name } of Utils.handleEvent.values()) {
+						if (handleEvent && name && ((enableCommands[1].handleEvent || []).includes(name) || (enableCommands[0].commands || []).includes(name))) {
+							handleEvent({ api, event, enableCommands, admin, prefix, blacklist });
 						}
 					}
 					switch (event.type) {
@@ -824,16 +664,7 @@ if (event.body && command && prefix && event.body?.toLowerCase().startsWith(pref
 						case 'message_unsend':
 						case 'message_reaction':
 							if (enableCommands[0].commands.includes(aliases(command?.toLowerCase())?.name)) {
-								await ((aliases(command?.toLowerCase())?.run || (() => {}))({
-									api,
-									event,
-									args,
-									enableCommands,
-									admin,
-									prefix,
-									blacklist,
-									Utils,
-								}));
+								await ((aliases(command?.toLowerCase())?.run || (() => {}))({ api, event, args, enableCommands, admin, prefix, blacklist, Utils }));
 							}
 							break;
 					}
@@ -848,6 +679,7 @@ if (event.body && command && prefix && event.body?.toLowerCase().startsWith(pref
 		});
 	});
 }
+
 async function deleteThisUser(userid) {
 	const configFile = './data/history.json';
 	let config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
@@ -861,6 +693,7 @@ async function deleteThisUser(userid) {
 		console.log(error);
 	}
 }
+
 async function addThisUser(userid, enableCommands, state, prefix, admin, blacklist) {
 	const configFile = './data/history.json';
 	const sessionFolder = './data/session';
@@ -886,6 +719,7 @@ function aliases(command) {
 	}
 	return null;
 }
+
 async function main() {
 	const empty = require('fs-extra');
 	const cacheFile = './script/cache';
@@ -896,7 +730,7 @@ async function main() {
 	const sessionFolder = path.join('./data/session');
 	if (!fs.existsSync(sessionFolder)) fs.mkdirSync(sessionFolder);
 	const adminOfConfig = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : createConfig();
-		cron.schedule(`*/${adminOfConfig[0].masterKey.restartTime} * * * *`, async () => {
+	cron.schedule(`*/${adminOfConfig[0].masterKey.restartTime} * * * *`, async () => {
 		const history = JSON.parse(fs.readFileSync('./data/history.json', 'utf-8'));
 		history.forEach(user => {
 			(!user || typeof user !== 'object') ? process.exit(1): null;
@@ -912,12 +746,7 @@ async function main() {
 		for (const file of fs.readdirSync(sessionFolder)) {
 			const filePath = path.join(sessionFolder, file);
 			try {
-				const {
-					enableCommands,
-					prefix,
-					admin,
-					blacklist
-				} = config.find(item => item.userid === path.parse(file).name) || {};
+				const { enableCommands, prefix, admin, blacklist } = config.find(item => item.userid === path.parse(file).name) || {};
 				const state = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 				if (enableCommands) await accountLogin(state, enableCommands, prefix, admin, blacklist);
 			} catch (error) {
@@ -952,6 +781,7 @@ function createConfig() {
 	fs.writeFileSync('./data/config.json', JSON.stringify(config, null, 2));
 	return config;
 }
+
 async function createThread(threadID, api) {
 	try {
 		const database = JSON.parse(fs.readFileSync('./data/database.json', 'utf8'));
@@ -966,6 +796,7 @@ async function createThread(threadID, api) {
 		console.log(error);
 	}
 }
+
 async function createDatabase() {
 	const data = './data';
 	const database = './data/database.json';
@@ -979,6 +810,7 @@ async function createDatabase() {
 	}
 	return database;
 }
+
 async function updateThread(id) {
 	const database = JSON.parse(fs.readFileSync('./data/database.json', 'utf8'));
 	const user = database[1]?.Users.find(user => user.id === id);
@@ -988,6 +820,7 @@ async function updateThread(id) {
 	user.exp += 1;
 	await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2));
 }
+
 const Experience = {
 	async levelInfo(id) {
 		const database = JSON.parse(fs.readFileSync('./data/database.json', 'utf8'));
@@ -998,7 +831,7 @@ const Experience = {
 		return data;
 	},
 	async levelUp(id) {
-		const database = JSON.parse(fs.readFileSync('./data/database.json', 'utf8'));
+		const database = JSON.parse(fs.readFileSync('./data/database.json', 'utf-8'));
 		const data = database[1].Users.find(user => user.id === id);
 		if (!data) {
 			return;
@@ -1008,6 +841,7 @@ const Experience = {
 		return data;
 	}
 }
+
 const Currencies = {
 	async update(id, money) {
 		try {
@@ -1017,7 +851,7 @@ const Currencies = {
 				return;
 			}
 			data.money += money;
-			await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2), 'utf-8');
+			await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2));
 			return data;
 		} catch (error) {
 			console.error('Error updating Currencies:', error);
@@ -1033,7 +867,7 @@ const Currencies = {
 			if (data && typeof data.money === 'number' && typeof money === 'number') {
 				data.money += money;
 			}
-			await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2), 'utf-8');
+			await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2));
 			return data;
 		} catch (error) {
 			console.error('Error checking Currencies:', error);
@@ -1049,7 +883,7 @@ const Currencies = {
 			if (data && typeof data.money === 'number' && typeof money === 'number') {
 				data.money -= money;
 			}
-			await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2), 'utf-8');
+			await fs.writeFileSync('./data/database.json', JSON.stringify(database, null, 2));
 			return data;
 		} catch (error) {
 			console.error('Error checking Currencies:', error);
@@ -1076,5 +910,6 @@ const Currencies = {
 			console.error('Error checking Currencies:', error);
 		}
 	}
-};
+}
+
 main()
