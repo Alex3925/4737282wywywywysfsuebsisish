@@ -166,7 +166,7 @@ label {
 
 #inputOfPrefix,
 #inputOfAdmin,
-#newNickname {
+#inputOfBotName {
   padding: 13px;
   width: 200px;
   border: 1px solid #000000;
@@ -179,23 +179,20 @@ label {
 #listOfCommands,
 #listOfCommandsEvent,
 #prefixOfCommands,
-#adminOfCommands,
-#nicknameChange {
+#adminOfCommands {
   border: none !important;
 }
 
 #listOfCommands:not(.modal),
 #listOfCommandsEvent:not(.modal),
 #prefixOfCommands:not(.modal),
-#adminOfCommands:not(.modal),
-#nicknameChange:not(.modal) {
+#adminOfCommands:not(.modal) {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 #listOfCommandsEvent:not(.modal),
 #prefixOfCommands:not(.modal),
-#adminOfCommands:not(.modal),
-#nicknameChange:not(.modal) {
+#adminOfCommands:not(.modal) {
   box-shadow: none !important;
 }
 
@@ -299,33 +296,4 @@ video {
   100% {
     filter: hue-rotate(-360deg);
   }
-}
-
-#nicknameChange {
-  margin-top: 20px;
-  text-align: center;
-}
-
-#nicknameChange input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #178fdf;
-  border-radius: 5px;
-}
-
-#nicknameChange button {
-  display: inline-block;
-  background-color: #3ee2ff;
-  border: 1px solid #00c3ff;
-  color: #261a1a;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-#nicknameChange button:hover {
-  background-color: #46c8ff;
-  border: 1px solid #00e5ff;
 }
