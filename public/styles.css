@@ -39,18 +39,20 @@ body {
 .container {
   color: #fff;
   background: rgba(0, 0, 0, 0.8);
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 0 .2rem #000000, 0 0 .2rem #1b84b5, 0 0 2rem #0000f5, 0 0 0.8rem #1F51FF, 0 0 2.8rem #000000, inset 0 0 1.3rem #3e81ef;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.7), 0 0 20px rgba(0, 153, 255, 0.7), 0 0 30px rgba(0, 102, 255, 0.7), 0 0 40px rgba(0, 51, 255, 0.7), inset 0 0 20px rgba(0, 255, 255, 0.5);
   margin: 20px auto;
   outline: 2px solid #fff;
   max-width: 800px;
+  backdrop-filter: blur(10px);
 }
 
 h1 {
   color: #fff;
-  font-size: 24px;
+  font-size: 30px;
   margin-bottom: 15px;
+  text-shadow: 0 0 5px #00c8ff, 0 0 10px #0080ff;
 }
 
 label {
@@ -61,7 +63,7 @@ label {
   margin-bottom: 5px;
   padding: 10px;
   border-radius: 10px;
-  background-image: none;
+  text-shadow: 0 0 5px #00c8ff, 0 0 10px #0080ff;
 }
 
 .centered-textarea {
@@ -71,45 +73,57 @@ label {
   min-height: 150px;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #178fdf;
-  border-radius: 5px;
+  border: 2px solid #178fdf;
+  border-radius: 10px;
   resize: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  backdrop-filter: blur(5px);
+  transition: border-color 0.3s ease;
+}
+
+.centered-textarea:focus {
+  border-color: #00e5ff;
 }
 
 .btn-primary {
   display: inline-block;
   background-color: #3ee2ff;
-  border: 1px solid #00c3ff;
+  border: 2px solid #00c3ff;
   color: #261a1a;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   text-decoration: none;
   margin: 10px 0;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-primary:hover {
   background-color: #46c8ff;
-  border: 1px solid #00e5ff;
+  border-color: #00e5ff;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 10px rgba(0, 255, 255, 0.5);
 }
 
 .success-message {
-  color: green;
+  color: #00ff00;
   margin-top: 10px;
+  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
 }
 
 .footer {
-  background-color: #00ffea 46%, #1286c1 100%;
-  padding: 10px;
+  background: linear-gradient(315deg, #00ffea 46%, #1286c1 100%);
+  padding: 20px;
   text-align: center;
   font-size: 16px;
   color: #fff;
   margin-top: 50px;
-  border-top: 1px solid #blue;
+  border-top: 2px solid #00c8ff;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+  box-shadow: 0 -5px 10px rgba(0, 255, 255, 0.5);
 }
 
 .footer p {
@@ -130,26 +144,31 @@ label {
 #result {
   padding: 10px;
   margin-top: 20px;
-  border-radius: 5px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
 }
 
 .center-placeholder::placeholder {
   text-align: center;
+  color: #00e5ff;
 }
 
 .form-check {
   display: flex;
   align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
   padding: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .form-check:hover {
-  background-color: #f5f5;
+  background-color: rgba(0, 255, 255, 0.1);
   border-color: #ff00bf;
+  box-shadow: 0 5px 10px rgba(255, 0, 191, 0.5);
 }
 
 .form-check-input {
@@ -166,11 +185,19 @@ label {
 #inputOfBotName {
   padding: 13px;
   width: 200px;
-  border: 1px solid #000000;
-  border-radius: 8px;
+  border: 2px solid #000000;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+#inputOfPrefix:focus,
+#inputOfAdmin:focus,
+#inputOfBotName:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #00e5ff;
 }
 
 #listOfCommands,
@@ -195,7 +222,8 @@ label {
 
 div {
   margin-bottom: 10px;
-  border-radius: 5px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 video {
@@ -214,7 +242,9 @@ video {
 @keyframes neon-border {
   from {
     border-color: #0080ff;
-    box-shadow: 0 0 10px #00c8ff, 0 0 20px #00a2ff, 0 0 30px #0080ff;
+    box-shadow: 0 0 10px #00c8ff, 0 0 20px #00a2
+
+ff, 0 0 30px #0080ff;
   }
   to {
     border-color: #0da2ff;
@@ -245,7 +275,7 @@ video {
   padding: 10px 20px;
   border-radius: 10px;
   gap: 10px;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 #listOfCommands li:hover {
@@ -294,3 +324,4 @@ video {
     filter: hue-rotate(-360deg);
   }
 }
+
