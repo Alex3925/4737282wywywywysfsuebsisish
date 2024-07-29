@@ -2,18 +2,20 @@
 <html lang="en">
 <head>
     <title>ChatBotV1</title>
-    <link href='https://imgur.com/a/3MeHbXl.jpeg' rel='shortcut icon' type='image/x-icon'/>
+    <link href='https://i.imgur.com/dUZxyj3.jpeg' rel='shortcut icon' type='image/x-icon'/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
+    <!-- Include SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">𝗛𝗼𝗺𝗲 </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav" style="margin-right: 70px;">
             <ul class="navbar-nav">
@@ -30,21 +32,21 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="online_user">Active</a>
-                <!-- Developer nav link restored -->
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.facebook.com/aceeee012?mibextid=ZbWKwL">Owner 👑</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.facebook.com/zachary.pnaveax?mibextid=ZbWKwL">Assistant 🌠</a>
+                    <a class="nav-link" href="https://profile-zach.replit.app">Owner</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://www.facebook.com/profile.php?id=100072403222845">Assistant🌠</a>
                 </li>
             </ul>
         </div>
     </nav>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Kindly get your Appstate and put it on to the container.<a href="http://167.235.13.16:20540/getAppstate" style="text-decoration: none; color: rgb(255, 0, 255);">Click here</a> </h1>
-</div>
+        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Kindley get your Appstate(Jonell Magallnes) and put it on to the container.<a href="https://appstate-getterjonellccproject.onrender.com/" style="text-decoration: none; color: rgb(255, 0, 255);">Click here</a> </h1>
+    </div>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; padding: 10px;">𝗘𝗻𝘁𝗲𝗿 𝗬𝗼𝘂𝗿 𝗙𝗯𝘀𝘁𝗮𝘁𝗲 𝗖𝗼𝗼𝗸𝗶𝗲 on ChatBotV1 (AutoBot)</h1>
+        <h1 class="col text-center" style="font-size: 20px; padding: 10px;">𝗘𝗻𝘁𝗲𝗿 𝗬𝗼𝘂𝗿 𝗙𝗯𝘀𝘁𝗮𝘁𝗲 𝗖𝗼𝗼𝗸𝗶𝗲 on CHATBOTV5 (AutoBot)</h1>
         <form id="json-form" onsubmit="submitForm(event)">
             <div class="row">
                 <div class="col-md-12">
@@ -55,8 +57,8 @@
         <p style="margin-top: 10px; color: #FFFFFF">Greetings! Begin by entering your cookie scroll down to see the other features.</p>
     </div>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Inspired by my crush, Our latest Automated Bot Website is ready to make your day, more engaging, and fun. </h1>
-       </div>
+        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Inspired by ChatBotV5,  Our latest Automated Bot Website is ready to make your day, more engaging, and fun. </h1>
+    </div>
     <div class="container" id="listOfCommands">
         <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
         <button class="btn btn-primary" onclick="selectAllCommands()">Select all commands</button>
@@ -74,23 +76,67 @@
         <input type="text" id="inputOfAdmin">
     </div>
     <label style="font-size: 14px; display: flex; align-items: center; padding: 22px;">
-        <input type="checkbox" id="agreeCheckbox" style="color: #FFF; margin-right: 10px;"> Checking this box certifies that I have read, understood, and agreed to the Terms and Conditions. </label>
+        <input type="checkbox" id="agreeCheckbox" style="color: #FFF; margin-right: 10px;"> Checking this box certifies that I have read, understood, and agreed to the Terms and Conditions. 
+    </label>
     <div class="col text-center">
-        <button class="btn btn-primary" onclick="State()" disabled id="submitButton" style="width: 100%">Submit</button>
-    </div>
+        <button class="btn btn-primary" onclick="handleSubmit()" disabled id="submitButton" style="width: 100%">Submit</button>
     </div>
     <div id="result" class="container text-center" style="display: none;"></div>
     <div class="footer">
         <p>Time: <span id="time"></span></p>
         <p>Ping: <span id="ping"></span></p>
     </div>
+    <!-- Include SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Thank you for using my AutoBot, if you have any concern kindly report to the <a href="https://www.facebook.com/aceeee012?mibextid=ZbWKwL" style="text-decoration: none; color: rgb(0, 251, 255);">owner</a></h1>
+        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Thank you for using my AutoBot, if you have any concern kindly report to the <a href="https://www.facebook.com/zachary.pnaveax" style="text-decoration: none; color: rgb(0, 251, 255);">owner</a></h1>
     </div>
+    <!-- SweetAlert2 Welcome Message -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: 'Hello there',
+                text: 'Welcome to Autobot (Messenger)..',
+                imageUrl: 'https://i.imgur.com/dUZxyj3.jpeg',
+                imageWidth: 200,
+                imageHeight: 200,
+                imageAlt: 'Custom image'
+            });
+        });
+
+        document.getElementById('agreeCheckbox').addEventListener('change', function() {
+            const submitButton = document.getElementById('submitButton');
+            if (this.checked) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        });
+
+        function handleSubmit() {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Your Facebook account will be bot",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, make it bot"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Success",
+                        text: "Your Facebook bot is ready",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 </html>
