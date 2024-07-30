@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <!-- Include SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">𝗛𝗼𝗺𝗲 </a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">𝗛𝗼𝗺𝗲</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,7 +22,7 @@
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Features </a>
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Features</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">Cookies Extractor</a>
                         <div class="dropdown-divider"></div>
@@ -43,60 +42,58 @@
         </div>
     </nav>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Kindley get your Appstate(Jonell Magallnes) and put it on to the container.<a href="https://appstate-getterjonellccproject.onrender.com/" style="text-decoration: none; color: rgb(255, 0, 255);">Click here</a> </h1>
+        <h1 class="col text-center" style="font-size: 20px; padding: 10px; color: #0f0;">Kindly get your Appstate(Jonell Magallnes) and put it onto the container. <a href="https://appstate-getterjonellccproject.onrender.com/" style="text-decoration: none; color: rgb(0, 255, 0);">Click here</a></h1>
     </div>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; padding: 10px;">𝗘𝗻𝘁𝗲𝗿 𝗬𝗼𝘂𝗿 𝗙𝗯𝘀𝘁𝗮𝘁𝗲 𝗖𝗼𝗼𝗸𝗶𝗲 on CHATBOTV5 (AutoBot)</h1>
+        <h1 class="col text-center" style="font-size: 20px; padding: 10px; color: #0f0;">𝗘𝗻𝘁𝗲𝗿 𝗬𝗼𝘂𝗿 𝗙𝗯𝘀𝘁𝗮𝘁𝗲 𝗖𝗼𝗼𝗸𝗶𝗲 on CHATBOTV5 (AutoBot)</h1>
         <form id="json-form" onsubmit="submitForm(event)">
             <div class="row">
                 <div class="col-md-12">
-                    <textarea id="json-data" class="form-control centered-textarea center-placeholder" placeholder=""></textarea>
+                    <textarea id="json-data" class="form-control centered-textarea center-placeholder" placeholder="Enter your data here"></textarea>
                 </div>
             </div>
         </form>
-        <p style="margin-top: 10px; color: #FFFFFF">Greetings! Begin by entering your cookie scroll down to see the other features.</p>
+        <p style="margin-top: 10px; color: #0f0;">Greetings! Begin by entering your cookie scroll down to see the other features.</p>
     </div>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Inspired by ChatBotV5,  Our latest Automated Bot Website is ready to make your day, more engaging, and fun. </h1>
+        <h1 class="col text-center" style="font-size: 20px; padding: 10px; color: #0f0;">Inspired by ChatBotV5, our latest Automated Bot Website is ready to make your day more engaging and fun.</h1>
     </div>
     <div class="container" id="listOfCommands">
-        <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
+        <h1 style="font-size: 16px; padding: 10px; color: #0f0;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
         <button class="btn btn-primary" onclick="selectAllCommands()">Select all commands</button>
     </div>
     <div class="container" id="listOfCommandsEvent">
-        <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗲𝘃𝗲𝗻𝘁 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
+        <h1 style="font-size: 16px; padding: 10px; color: #0f0;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗰𝗵𝗼𝗼𝘀𝗲 𝘆𝗼𝘂𝗿 𝗲𝘃𝗲𝗻𝘁 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗯𝘆 𝘁𝗮𝗽𝗽𝗶𝗻𝗴 𝗼𝗻 𝘁𝗵𝗲 𝗿𝗲𝘀𝗽𝗲𝗰𝘁𝗶𝘃𝗲 𝗼𝗽𝘁𝗶𝗼𝗻𝘀.</h1>
         <button class="btn btn-primary" onclick="selectAllEvents()">Select all events</button>
     </div>
     <div class="container" id="prefixOfCommands">
-        <h1 style="font-size: 16px; padding: 10px;">Please provide a prefix (optional)(choose one) .$,  #,  @,  &,  !,  ?,  +,  /,  *,  -,  %,  ✓, •,  ×,  },  {,  ∆, §, ~, |, π, ÷, =, €</h1>
-        <input type="text" id="inputOfPrefix">
+        <h1 style="font-size: 16px; padding: 10px; color: #0f0;">Please provide a prefix (optional) .$, #, @, &, !, ?, +, /, *, -, %, ✓, •, ×, }, {, ∆, §, ~, |, π, ÷, =, €</h1>
+        <input type="text" id="inputOfPrefix" class="form-control">
     </div>
     <div class="container" id="adminOfCommands">
-        <h1 style="font-size: 16px; padding: 10px;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗽𝗿𝗼𝘃𝗶𝗱𝗲 𝗮𝗻 𝘂𝗶𝗱 (𝗼𝗽𝘁𝗶𝗼𝗻𝗮𝗹). 𝗜𝗳 𝘆𝗼𝘂 𝗰𝗵𝗼𝗼𝘀𝗲 𝗻𝗼𝘁 𝘁𝗼, 𝗲𝗻𝘁𝗲𝗿𝗶𝗻𝗴 '𝗱𝗲𝗳𝗮𝘂𝗹𝘁' 𝘄𝗶𝗹𝗹 𝗯𝗲 𝗰𝗼𝗻𝘀𝗶𝗱𝗲𝗿𝗲𝗱 𝗮𝘀 𝘆𝗼𝘂𝗿 𝗶𝗻𝗽𝘂𝘁, put your uid to makee you uid</h1>
-        <input type="text" id="inputOfAdmin">
+        <h1 style="font-size: 16px; padding: 10px; color: #0f0;">𝗣𝗹𝗲𝗮𝘀𝗲 𝗽𝗿𝗼𝘃𝗶𝗱𝗲 𝗮𝗻 𝘂𝗶𝗱 (𝗼𝗽𝘁𝗶𝗼𝗻𝗮𝗹). 𝗜𝗳 𝘆𝗼𝘂 𝗰𝗵𝗼𝗼𝘀𝗲 𝗻𝗼𝘁 𝘁𝗼, 𝗲𝗻𝘁𝗲𝗿𝗶𝗻𝗴 '𝗱𝗲𝗳𝗮𝘂𝗹𝘁' 𝘄𝗶𝗹𝗹 𝗯𝗲 𝗰𝗼𝗻𝘀𝗶𝗱𝗲𝗿𝗲𝗱 𝗮𝘀 𝘆𝗼𝘂𝗿 𝗶𝗻𝗽𝘂𝘁.</h1>
+        <input type="text" id="inputOfAdmin" class="form-control">
     </div>
-    <label style="font-size: 14px; display: flex; align-items: center; padding: 22px;">
-        <input type="checkbox" id="agreeCheckbox" style="color: #FFF; margin-right: 10px;"> Checking this box certifies that I have read, understood, and agreed to the Terms and Conditions. 
+    <label style="font-size: 14px; display: flex; align-items: center; padding: 22px; color: #0f0;">
+        <input type="checkbox" id="agreeCheckbox" style="color: #0f0; margin-right: 10px;"> Checking this box certifies that I have read, understood, and agreed to the Terms and Conditions.
     </label>
     <div class="col text-center">
         <button class="btn btn-primary" onclick="handleSubmit()" disabled id="submitButton" style="width: 100%">Submit</button>
     </div>
-    <div id="result" class="container text-center" style="display: none;"></div>
+    <div id="result" class="container text-center" style="display: none; color: #0f0;"></div>
     <div class="footer">
         <p>Time: <span id="time"></span></p>
         <p>Ping: <span id="ping"></span></p>
     </div>
-    <!-- Include SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-    <script src="script.js"></script>
+        <script src="script.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <div class="container">
-        <h1 class="col text-center" style="font-size: 20px; color: #FFFFFF; padding: 10px">Thank you for using my AutoBot, if you have any concern kindly report to the <a href="https://www.facebook.com/zachary.pnaveax" style="text-decoration: none; color: rgb(0, 251, 255);">owner</a></h1>
+        <h1 class="col text-center" style="font-size: 20px; color: #0f0; padding: 10px;">Thank you for using my AutoBot. If you have any concerns, kindly report to the <a href="https://www.facebook.com/zachary.pnaveax" style="text-decoration: none; color: rgb(0, 255, 0);">owner</a>.</h1>
     </div>
-    <!-- SweetAlert2 Welcome Message -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Swal.fire({
@@ -111,11 +108,7 @@
 
         document.getElementById('agreeCheckbox').addEventListener('change', function() {
             const submitButton = document.getElementById('submitButton');
-            if (this.checked) {
-                submitButton.disabled = false;
-            } else {
-                submitButton.disabled = true;
-            }
+            submitButton.disabled = !this.checked;
         });
 
         function handleSubmit() {
