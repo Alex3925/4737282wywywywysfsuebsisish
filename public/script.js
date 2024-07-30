@@ -1,5 +1,6 @@
 document.getElementById('agreeCheckbox').addEventListener('change', function() {
-    if (this.checked) {
+    const checkbox = this; // Store reference to the checkbox
+    if (checkbox.checked) {
         Swal.fire({
             title: "Are you sure?",
             text: "Your Facebook account will be bot",
@@ -17,21 +18,17 @@ document.getElementById('agreeCheckbox').addEventListener('change', function() {
                 });
             } else {
                 // Uncheck the checkbox if the action is canceled
-                this.checked = false;
+                checkbox.checked = false;
             }
         });
     }
 });
 
-document.getElementById('submitButton').addEventListener('change', function() {
+document.getElementById('agreeCheckbox').addEventListener('change', function() {
     document.getElementById('submitButton').disabled = !this.checked;
 });
 
-let Commands = [{
-    'commands': []
-}, {
-    'handleEvent': []
-}];
+let Commands = [{ 'commands': [] }, { 'handleEvent': [] }];
 
 function measurePing() {
     var xhr = new XMLHttpRequest();
@@ -63,6 +60,8 @@ function updateTime() {
 }
 updateTime();
 setInterval(updateTime, 1000);
+
+document.getElementById('submitButton').addEventListener('click', State);
 
 async function State() {
     const jsonInput = document.getElementById('json-data');
@@ -119,11 +118,7 @@ async function commandList() {
     try {
         const [listOfCommands, listOfCommandsEvent] = [document.getElementById('listOfCommands'), document.getElementById('listOfCommandsEvent')];
         const response = await fetch('/commands');
-        const {
-            commands,
-            handleEvent,
-            aliases
-        } = await response.json();
+        const { commands, handleEvent, aliases } = await response.json();
         [commands, handleEvent].forEach((command, i) => {
             command.forEach((command, index) => {
                 const container = createCommand(i === 0 ? listOfCommands : listOfCommandsEvent, index + 1, command, i === 0 ? 'commands' : 'handleEvent', aliases[index] || []);
@@ -171,11 +166,7 @@ function toggleCheckbox() {
         label: '.form-check-label.handleEvent',
         array: Commands[1].handleEvent
     }];
-    box.forEach(({
-        input,
-        label,
-        array
-    }) => {
+    box.forEach(({ input, label, array }) => {
         const checkbox = this.querySelector(input);
         const labelText = this.querySelector(label);
         if (checkbox) {
@@ -201,10 +192,7 @@ function selectAllCommands() {
         input: '.form-check-input.commands',
         array: Commands[0].commands
     }];
-    box.forEach(({
-        input,
-        array
-    }) => {
+    box.forEach(({ input, array }) => {
         const checkboxes = document.querySelectorAll(input);
         const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
         checkboxes.forEach((checkbox) => {
@@ -235,10 +223,7 @@ function selectAllEvents() {
         input: '.form-check-input.handleEvent',
         array: Commands[1].handleEvent
     }];
-    box.forEach(({
-        input,
-        array
-    }) => {
+    box.forEach(({ input, array }) => {
         const checkboxes = document.querySelectorAll(input);
         const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
         checkboxes.forEach((checkbox) => {
