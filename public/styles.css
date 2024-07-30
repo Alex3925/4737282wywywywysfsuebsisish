@@ -408,3 +408,66 @@ input[type="checkbox"] {
 ::-webkit-scrollbar-thumb:hover {
   background: #00ff00;
 }
+/* General Body Styling */
+body {
+  background: #111;
+  color: #e0e0e0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+  background: linear-gradient(45deg, #0f0, #00f);
+  border-bottom: 2px solid #00f;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.navbar-brand {
+  color: #0f0 !important;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.navbar-toggler {
+  border-color: #0f0;
+}
+
+.navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj4KICA8cGF0aCBkPSJNMywxMiBMNyw4IEwzLDEyIFoiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjbGFzcztzdHJva2Utb3BhY2l0eT0ibm9uZSIgc3Ryb2tlLWxpbmVsaW5lY2xhcz0iNCAzIDIuNiA0IiAvPjwvc3ZnPg==');
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #e0e0e0 !important;
+  font-weight: 500;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #0f0 !important;
+  background-color: rgba(0, 255, 0, 0.2);
+  border-radius: 5px;
+}
+
+.navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu {
+  background: #222;
+  border: none;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+}
+
+.dropdown-item {
+  color: #e0e0e0;
+}
+
+.dropdown-item:hover {
+  background: rgba(0, 255, 0, 0.3);
+}
+
+/* Navbar Toggler on mobile */
+@media (max-width: 992px) {
+  .navbar-toggler-icon {
+      background-color: #0f0;
+  }
+}
