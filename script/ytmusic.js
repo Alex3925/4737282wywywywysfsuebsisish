@@ -33,7 +33,7 @@ module.exports = {
     guide: "{p} ytmusic <music name> / reply to audio or video"
   },
 
-  onStart: async function ({ api, event, args }) {
+  onStart: async function ({ api, event, args, message }) {
     api.setMessageReaction("🕢", event.messageID, (err) => {}, true);
 
     try {
