@@ -5,7 +5,7 @@ module.exports.config = {
   version: '1.0.0',
   role: 0,
   hasPrefix: false,
-  aliases: [],[Sim]
+  aliases: [],
   description: "Chat with SimSimi",
   usage: "Sim [message]",
   credits: 'Jerome | Duke Agustin', //converted By AI
