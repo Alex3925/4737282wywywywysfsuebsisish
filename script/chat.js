@@ -5,7 +5,7 @@ module.exports.config = {
   version: '1.0',
   role: 0,
   hasPrefix: false,
-  aliases: [Chat],
+  aliases: []
   description: "Command to turn on/off chat",
   usage: "Chat [on/off]",
   credits: 'Annaleiah',
