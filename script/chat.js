@@ -1,51 +1,54 @@
+global.zenLeaf = {};
+
 module.exports.config = {
   name: 'chat',
   version: '1.0',
   role: 0,
-  hasPrefix: true,
-  aliases: [],
-  description: 'Command to turn on/off chat',
-  usage: 'chat [on/off]',
-  credits: 'Mt'
+  hasPrefix: false,
+  aliases: [Chat],
+  description: "Command to turn on/off chat",
+  usage: "Chat [on/off]",
+  credits: 'Annaleiah',
+  cooldown: 5,
 };
 
 module.exports.run = async function({ api, event, args }) {
-  const { threadID, senderID, messageID } = event;
-  const { role } = event.senderID;
-
-  if (args[0] === 'on') {
-    if (role < 1) {
-      return api.sendMessage('You do not have permission to use this command!', threadID, messageID);
+  if (args[0] === "on") {
+    if (event.senderID!== api.getCurrentUserID()) {
+      api.sendMessage("You do not have permission to use this command!", event.threadID, event.messageID);
+      return;
     }
-
+    
+    const threadID = event.threadID; 
     global.zenLeaf[threadID] = global.zenLeaf[threadID] || {};
     global.zenLeaf[threadID].chatEnabled = true;
-    api.sendMessage('Chat off is now disabled. Members can now freely chat.', threadID, messageID);
-  } else if (args[0] === 'off') {
-    if (role < 1) {
-      return api.sendMessage('You do not have permission to use this command!', threadID, messageID);
+    api.sendMessage("Chat off is now disabled. Members can now freely chat.", event.threadID, event.messageID);
+  } else if (args[0] === "off") {
+    if (event.senderID!== api.getCurrentUserID()) {
+      api.sendMessage("You do not have permission to use this command!", event.threadID, event.messageID);
+      return;
     }
-
+    
+    const threadID = event.threadID; 
     global.zenLeaf[threadID] = global.zenLeaf[threadID] || {};
     global.zenLeaf[threadID].chatEnabled = false;
-    api.sendMessage('Chat off enabled. Members who chat will be kicked🫵😼.', threadID, messageID);
+    api.sendMessage("Chat off enabled. Members who chat will be kicked.", event.threadID, event.messageID);
   }
 };
 
 module.exports.handleEvent = async function({ api, event }) {
-  const { threadID, senderID, messageID } = event;
-  const { role } = event.senderID;
+  const threadID = event.threadID; 
   const chatEnabled = global.zenLeaf[threadID]?.chatEnabled?? true;
 
   if (!chatEnabled) {
-    if (role < 1) {
+    if (event.senderID!== api.getCurrentUserID()) {
       // Kick user if chat is disabled
-      api.removeUserFromGroup(senderID, threadID, (err) => {
+      api.removeUserFromGroup(event.senderID, threadID, (err) => {
         if (err) {
           console.error(err);
         }
       });
-      api.sendMessage('😼 CHAT DETECTED | The group is currently on chat off. You have been kicked from the group.', threadID, messageID);
+      api.sendMessage("CHAT DETECTED | The group is currently on chat off. You have been kicked from the group.", event.threadID, event.messageID);
     }
   }
 };
