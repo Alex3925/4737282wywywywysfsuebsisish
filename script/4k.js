@@ -1,61 +1,56 @@
-const { writeFileSync, existsSync, mkdirSync } = require("fs");
+const { writeFileSync, existsSync, mkdirSync, createReadStream } = require("fs");
 const { join } = require("path");
 const axios = require("axios");
 const tinyurl = require('tinyurl');
 
-module.exports = {
-  info: {
-    name: "4k",
-    aliases: [remini],[enhance]
-    version: "2.0",
-    author: "Vex_Kshitiz",
-    cooldowns: 20,
-    role: 2,
-    shortDescription: "remini",
-    longDescription: "enhance the image quality",
-    category: "tool",
-    guide: {
-      en: "{p}remini (reply to image)",
+module.exports.config = {
+  name: "4k",
+  version: "2.0",
+  author: "Vex_Kshitiz",
+  cooldown: 20,
+  role: 2,
+  shortDescription: "Enhance image quality",
+  longDescription: "Enhance the image quality using remini",
+  category: "tool",
+  guide: "{p}4k (reply to an image)",
+};
+
+module.exports.run = async function({ api, event, args }) {
+  api.setMessageReaction("🕐", event.messageID, (err) => {}, true);
+  const { type, messageReply } = event;
+  const { attachments, threadID, messageID } = messageReply || {};
+
+  if (type === "message_reply" && attachments) {
+    const [attachment] = attachments;
+    const { url, type: attachmentType } = attachment || {};
+
+    if (!attachment || !["photo", "sticker"].includes(attachmentType)) {
+      return api.sendMessage("❌ | Reply must be an image.", threadID, messageID);
     }
-  },
 
-  async execute({ api, event, args }) {
-    api.setMessageReaction("🕐", event.messageID, (err) => {}, true);
-    const { type, messageReply } = event;
-    const { attachments, threadID, messageID } = messageReply || {};
+    try {
+      const shortUrl = await tinyurl.shorten(url);
+      const { data } = await axios.get(`https://vex-kshitiz.vercel.app/upscale?url=${encodeURIComponent(shortUrl)}`, {
+        responseType: "json"
+      });
 
-    if (type === "message_reply" && attachments) {
-      const [attachment] = attachments;
-      const { url, type: attachmentType } = attachment || {};
+      const imageUrl = data.result_url;
+      const imageResponse = await axios.get(imageUrl, { responseType: "arraybuffer" });
 
-      if (!attachment || !["photo", "sticker"].includes(attachmentType)) {
-        return api.sendMessage("❌ | Reply must be an image.", event.threadID);
+      const cacheDir = join(__dirname, "cache");
+      if (!existsSync(cacheDir)) {
+        mkdirSync(cacheDir, { recursive: true });
       }
 
-      try {
-        const shortUrl = await tinyurl.shorten(url);
-        const { data } = await axios.get(`https://vex-kshitiz.vercel.app/upscale?url=${encodeURIComponent(shortUrl)}`, {
-          responseType: "json"
-        });
+      const imagePath = join(cacheDir, "remi_image.png");
+      writeFileSync(imagePath, imageResponse.data);
 
-        const imageUrl = data.result_url;
-        const imageResponse = await axios.get(imageUrl, { responseType: "arraybuffer" });
-
-        const cacheDir = join(__dirname, "cache");
-        if (!existsSync(cacheDir)) {
-          mkdirSync(cacheDir, { recursive: true });
-        }
-
-        const imagePath = join(cacheDir, "remi_image.png");
-        writeFileSync(imagePath, imageResponse.data);
-
-        api.sendMessage({ attachment: fs.createReadStream(imagePath) }, event.threadID);
-      } catch (error) {
-        console.error(error);
-        api.sendMessage("❌ | Error occurred while enhancing image.", event.threadID);
-      }
-    } else {
-      api.sendMessage("❌ | Please reply to an image.", event.threadID);
+      api.sendMessage({ attachment: createReadStream(imagePath) }, threadID, messageID);
+    } catch (error) {
+      console.error(error);
+      api.sendMessage("❌ | Error occurred while enhancing image.", threadID, messageID);
     }
+  } else {
+    api.sendMessage("❌ | Please reply to an image.", threadID, messageID);
   }
 };
