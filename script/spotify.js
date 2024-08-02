@@ -1,6 +1,5 @@
 const axios = require('axios');
 const fs = require('fs-extra');
-const { getStreamFromURL, shortenURL, randomString } = global.utils;
 
 module.exports = {
   config: {
@@ -63,13 +62,35 @@ module.exports = {
 };
 
 async function downloadTrack(url) {
-  const stream = await getStreamFromURL(url);
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream'
+  });
   const filePath = `${__dirname}/tmp/${randomString()}.mp3`;
   const writeStream = fs.createWriteStream(filePath);
-  stream.pipe(writeStream);
+  response.data.pipe(writeStream);
 
   return new Promise((resolve, reject) => {
     writeStream.on('finish', () => resolve(filePath));
     writeStream.on('error', reject);
   });
+}
+
+function shortenURL(url) {
+  return axios.get(`https://api.shrtco.de/v2/shorten?url=${encodeURIComponent(url)}`)
+    .then(response => response.data.result.full_short_link)
+    .catch(error => {
+      console.error('Error shortening URL:', error);
+      return url; // fallback to original URL if shortening fails
+    });
+}
+
+function randomString(length = 10) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 }
