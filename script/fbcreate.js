@@ -17,7 +17,6 @@ module.exports.config = {
 module.exports.run = async function({ api, event, args }) {
   try {
     const threadID = event.threadID;
-    const senderID = event.senderID;
     const amount = parseInt(args[0], 10);
 
     if (isNaN(amount) || amount <= 0) {
