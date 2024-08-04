@@ -8,7 +8,7 @@ module.exports.config = {
   aliases: [],
   description: "Search and download mp3 songs",
   usage: "{p}s <song name> - Search for a video\nExample:\n  {p}s Blinding Lights\nAfter receiving the search results, reply with the song ID to download the track.\nReply with '1 to 9' to download the first track in the list.",
-  credits: "ArYAN",
+  credits: "Developer", //convert By Alex Gwapo
   cooldown: 0,
 };
 
