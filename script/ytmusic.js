@@ -1,5 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
+const path = require('path');
 
 module.exports.config = {
   name: "sing",
@@ -38,12 +39,10 @@ module.exports.run = async function({ api, event, args }) {
       });
 
       message += "\nReply with the number of the song ID you want to download.";
-      api.sendMessage({
-        body: message,
-      }, event.threadID, (err, info) => {
+      api.sendMessage({ body: message }, event.threadID, (err, info) => {
         if (err) {
           console.error(err);
-          api.sendMessage("🚧 | An error occurred while sending message.", event.threadID);
+          api.sendMessage("🚧 | An error occurred while sending the message.", event.threadID);
           return;
         }
         global.GoatBot.onReply.set(info.messageID, { commandName: this.config.name, messageID: info.messageID, author: event.senderID, tracks: topTracks });
@@ -75,7 +74,7 @@ module.exports.onReply = async function({ api, event, Reply, args }) {
     api.sendMessage("⏳ | Downloading your song, please wait...", event.threadID, async (err, info) => {
       if (err) {
         console.error(err);
-        api.sendMessage("🚧 | An error occurred while sending message.", event.threadID);
+        api.sendMessage("🚧 | An error occurred while sending the message.", event.threadID);
         return;
       }
 
@@ -86,7 +85,7 @@ module.exports.onReply = async function({ api, event, Reply, args }) {
           responseType: 'stream'
         });
 
-        const filePath = `${__dirname}/cache/${Date.now()}.mp3`;
+        const filePath = path.join(__dirname, 'cache', `${Date.now()}.mp3`);
         const writer = fs.createWriteStream(filePath);
 
         response.data.pipe(writer);
