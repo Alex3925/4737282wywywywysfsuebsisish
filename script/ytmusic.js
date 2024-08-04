@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 
 module.exports.config = {
   name: "sing",
@@ -7,8 +8,8 @@ module.exports.config = {
   hasPrefix: true,
   aliases: [],
   description: "Search and download mp3 songs",
-  usage: "{p}s <song name> - Search for a video\nExample:\n  {p}s Blinding Lights\nAfter receiving the search results, reply with the song ID to download the track.\nReply with '1 to 9' to download the first track in the list.",
-  credits: "Developer", //convert By Alex Gwapo
+  usage: "{p}s <song name> - Search for a song\nExample:\n  {p}s Blinding Lights\nAfter receiving the search results, reply with the song ID to download the track.\nReply with '1 to 9' to download the first track in the list.",
+  credits: "Developer", // Converted by Alex Gwapo
   cooldown: 0,
 };
 
@@ -21,16 +22,13 @@ module.exports.run = async function({ api, event, args }) {
   }
 
   try {
-    api.sendMessage(`Searching for your song request "${searchQuery}", Please wait...`, event.threadID, event.messageID);
+    api.sendMessage(`Searching for your song request "${searchQuery}", please wait...`, event.threadID, event.messageID);
     const response = await axios.get(apiUrl);
     const tracks = response.data;
 
     if (tracks.length > 0) {
       const topTracks = tracks.slice(0, 9);
       let message = "🎶 𝗬𝗼𝘂𝗧𝘂𝗯𝗲\n\n━━━━━━━━━━━━━\n🎶 | Here are the top 9 tracks\n\n";
-      const attachments = await Promise.all(topTracks.map(async (track) => {
-        return await global.utils.getStreamFromURL(track.thumbnail);
-      }));
 
       topTracks.forEach((track, index) => {
         message += `🆔 𝗜𝗗: ${index + 1}\n`;
@@ -42,7 +40,6 @@ module.exports.run = async function({ api, event, args }) {
       message += "\nReply with the number of the song ID you want to download.";
       api.sendMessage({
         body: message,
-        attachment: attachments
       }, event.threadID, (err, info) => {
         if (err) {
           console.error(err);
@@ -52,7 +49,7 @@ module.exports.run = async function({ api, event, args }) {
         global.GoatBot.onReply.set(info.messageID, { commandName: this.config.name, messageID: info.messageID, author: event.senderID, tracks: topTracks });
       });
     } else {
-      api.sendMessage("❓ | Sorry, couldn't find the requested video.", event.threadID);
+      api.sendMessage("❓ | Sorry, couldn't find the requested song.", event.threadID);
     }
   } catch (error) {
     console.error(error);
@@ -89,10 +86,24 @@ module.exports.onReply = async function({ api, event, Reply, args }) {
           responseType: 'stream'
         });
 
-        api.sendMessage({
-          body: `🎧| 𝗬𝗼𝘂𝗧𝘂𝗯𝗲\n\n━━━━━━━━━━━━━\nHere's your song ${selectedTrack.title}.\n\n📒 𝗧𝗶𝘁𝗹𝗲: ${selectedTrack.title}\n📅 𝗣𝘂𝗯𝗹𝗶𝘀𝗵 𝗗𝗮𝘁𝗲: ${selectedTrack.publishDate}\n👀 𝗩𝗶𝗲𝘄𝘀: ${selectedTrack.viewCount}\n👍 𝗟𝗶𝗸𝗲𝘀: ${selectedTrack.likeCount}\n\nEnjoy listening!...🥰`,
-          attachment: response.data
-        }, event.threadID);
+        const filePath = `${__dirname}/cache/${Date.now()}.mp3`;
+        const writer = fs.createWriteStream(filePath);
+
+        response.data.pipe(writer);
+
+        writer.on('finish', () => {
+          api.setMessageReaction("✅", info.messageID);
+
+          api.sendMessage({
+            body: `🎧| 𝗬𝗼𝘂𝗧𝘂𝗯𝗲\n\n━━━━━━━━━━━━━\nHere's your song ${selectedTrack.title}.\n\n📒 𝗧𝗶𝘁𝗹𝗲: ${selectedTrack.title}\n📅 𝗣𝘂𝗯𝗹𝗶𝘀𝗵 𝗗𝗮𝘁𝗲: ${selectedTrack.publishDate}\n👀 𝗩𝗶𝗲𝘄𝘀: ${selectedTrack.viewCount}\n👍 𝗟𝗶𝗸𝗲𝘀: ${selectedTrack.likeCount}\n\nEnjoy listening!...🥰`,
+            attachment: fs.createReadStream(filePath),
+          }, event.threadID, () => fs.unlinkSync(filePath));
+        });
+
+        writer.on('error', (err) => {
+          console.error(err);
+          api.sendMessage("🚧 | An error occurred while processing your request.", event.threadID);
+        });
       } catch (error) {
         console.error(error);
         api.sendMessage(`🚧 | An error occurred while processing your request: ${error.message}`, event.threadID);
