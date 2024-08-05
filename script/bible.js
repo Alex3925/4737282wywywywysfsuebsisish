@@ -19,7 +19,7 @@ module.exports.run = async function({ api, event }) {
     try {
         api.sendMessage("⏱️ | Fetching a Bible verse, please wait...", event.threadID, event.messageID);
 
-        const response = await axios.get("https://ggwp-yyxy.onrender.com/bibles?verse=John%203:16");
+        const response = await axios.get("https://ggwp-yyxy.onrender.com/bibles?verse=");
         const verse = response.data.verse;
         const reference = response.data.reference;
 
