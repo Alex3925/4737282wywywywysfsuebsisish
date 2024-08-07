@@ -5,7 +5,7 @@ const path = require('path');
 module.exports.config = {
   name: "ytb",
   version: "1.0",
-  author: "Jun",
+  author: "Jun", //convert By alex pogi
   cooldown: 10,
   role: 0,
   category: "media",
