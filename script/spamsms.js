@@ -3,7 +3,7 @@ const axios = require("axios");
 module.exports.config = {
   name: "spamsms",
   version: "1.0.0",
-  author: "Jun",
+  author: "Alex", // api by Deku
   cooldown: 10,
   role: 0,
   category: "utility",
