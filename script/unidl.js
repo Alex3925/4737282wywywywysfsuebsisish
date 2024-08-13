@@ -247,7 +247,7 @@ async function handleMedia({ url, extractAudio, message, api, event, dlmsgID, ur
 
 module.exports = {
     config: {
-        name: "anydl",
+        name: "unidl",
         aliases: ["alldl", "ytdl"],
         version: "2.0",
         author: "Tas33n",
