@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs-extra');
 
 module.exports.config = {
-    name: "sing",
+    name: "sing2",
     version: "4.6",
     author: "ArYAN", //convert by Alex
     shortDescription: { 
