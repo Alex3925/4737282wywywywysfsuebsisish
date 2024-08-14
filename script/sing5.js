@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const axios = require('axios');
 
 module.exports.config = {
-  name: "sing",
+  name: "sing5",
   version: "1.0.0",
   hasPermission: 0,
   credits: "Mirai Team & Yan Maglinte, Modified by [Alex Jhon]",
