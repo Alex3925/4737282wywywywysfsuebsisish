@@ -2,10 +2,10 @@ const fs = require('fs-extra');
 const axios = require('axios');
 
 module.exports.config = {
-    name: "sing5",
+    name: "sing",
     version: "1.0.0",
     hasPermission: 0,
-    credits: "Mirai Team & Yan Maglinte, Modified by [Alex Jhon]",
+    credits: "Mirai Team & Yan Maglinte, Modified by [Alex]",
     description: "Play music via YouTube link or search keyword",
     usePrefix: true,
     commandCategory: "media",
@@ -18,8 +18,10 @@ async function downloadMusicFromYoutube(videoUrl, path) {
         const timestart = Date.now();
         const response = await axios.get(`https://hiroshi-rest-api.replit.app/search/youtube?q=${encodeURIComponent(videoUrl)}`);
         
-        if (response.data.error) throw new Error(response.data.error);
-        
+        if (!Array.isArray(response.data) || response.data.length === 0) {
+            throw new Error("No results found or API returned unexpected data.");
+        }
+
         const data = response.data[0];  // Assuming the first result is the best match
 
         const result = {
@@ -89,7 +91,10 @@ async function run({ api, event, args }) {
 
     try {
         const response = await axios.get(`https://hiroshi-rest-api.replit.app/search/youtube?q=${encodeURIComponent(keywordSearch)}`);
-        if (response.data.error) throw new Error(response.data.error);
+        
+        if (!Array.isArray(response.data) || response.data.length === 0) {
+            throw new Error("No results found or API returned unexpected data.");
+        }
 
         const data = response.data;
         const link = data.map(value => value.id);
@@ -125,7 +130,7 @@ async function run({ api, event, args }) {
         }, event.messageID);
     } catch (e) {
         console.log(e);
-        return api.sendMessage(`⚠️An error occurred, please try again in a moment!!\n${e}`, event.threadID, event.messageID);
+        return api.sendMessage(`⚠️An error occurred, please try again in a moment!!\n${e.message || e}`, event.threadID, event.messageID);
     }
 }
 
