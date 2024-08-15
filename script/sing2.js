@@ -91,5 +91,22 @@ module.exports = {
             responseType: 'stream'
           });
 
-          api.sendMessage({
-            body: `🎧| 𝗬𝗼𝘂𝗧𝘂𝗯𝗲\n\n━━━━━━━━━━━━━\nHere's your video ${selectedTrack.title}.\n\n📒 𝗧𝗶𝘁𝗹𝗲: ${selectedTrack.title}\n📅 𝗣𝘂𝗯𝗹𝗶𝘀𝗵 𝗗𝗮𝘁𝗲: ${selectedTrack.publishDate}\n👀 𝗩𝗶𝗲𝘄𝘀: ${selectedTrack.viewCount}\n👍 𝗟
+                    api.sendMessage({
+            body: `🎧| 𝗬𝗼𝘂𝗧𝘂𝗯𝗲\n\n━━━━━━━━━━━━━\nHere's your video ${selectedTrack.title}.\n\n📒 𝗧𝗶𝘁𝗹𝗲: ${selectedTrack.title}\n📅 𝗣𝘂𝗯𝗹𝗶𝘀𝗵 𝗗𝗮𝘁𝗲: ${selectedTrack.publishDate}\n👀 𝗩𝗶𝗲𝘄𝘀: ${selectedTrack.viewCount}\n👍 𝗟𝗶𝗸𝗲𝘀: ${selectedTrack.likeCount}\n\nEnjoy watching!...🥰`,
+            attachment: response.data
+          }, event.threadID);
+        } catch (error) {
+          console.error(error);
+          api.sendMessage(`🚧 | An error occurred while processing your request: ${error.message}`, event.threadID);
+        }
+      });
+
+    } catch (error) {
+      console.error(error);
+      api.sendMessage(`🚧 | An error occurred while processing your request: ${error.message}`, event.threadID);
+    }
+
+    api.unsendMessage(event.messageID);
+    global.GoatBot.onReply.delete(event.messageID);
+  }
+};
